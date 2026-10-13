@@ -2,61 +2,63 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Binance Spot AL-SAT Tarayıcı</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kripto Al-Sat Tarayıcı</title>
 <style>
 *{box-sizing:border-box}
+:root{color-scheme:light}
 body{margin:0;padding:14px;background:#eef2f7;color:#172033;font-family:Arial,sans-serif}
-h1{font-size:23px;margin:5px 0}
-h2{font-size:18px;margin:0}
-p{font-size:13px;line-height:1.5;color:#475569}
-button{padding:10px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:#172033;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.5}
-.primary{background:#087f5b;color:white;border:0;padding:13px 18px}
-#status{background:white;border:1px solid #cbd5e1;border-radius:9px;padding:12px;margin:12px 0;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
-.summary{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
-.pill{background:white;border:1px solid #d5dce6;border-radius:8px;padding:10px;font-size:12px}
-.section{background:white;border:1px solid #d5dce6;border-radius:12px;padding:12px;margin:15px 0}
-.head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.filters{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
-.filters button{font-size:11px;padding:9px}
-.filters button.active{background:#172033;color:white}
-.wrap{overflow-x:auto;border:1px solid #e2e8f0;border-radius:8px}
-table{border-collapse:collapse;width:100%;min-width:850px;font-size:12px}
-th,td{padding:10px 8px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-align:top}
-th{background:#e2e8f0;white-space:nowrap}
+h1{font-size:23px;margin:4px 0 8px}
+h2{font-size:19px;margin:0 0 12px}
+h3{font-size:16px;margin:0 0 10px}
+p{color:#334155;line-height:1.5;font-size:14px}
+button{border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;background:#fff;color:#172033;font-weight:700;font-size:13px;cursor:pointer}
+button:disabled{opacity:.55}
+.primary{background:#087f5b;color:#fff;border:0;padding:13px 18px;font-size:15px}
+#status{padding:12px;background:#fff;border:1px solid #cbd5e1;border-radius:9px;color:#172033;font-size:14px;margin:12px 0}
+.summary{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.pill{background:#fff;border:1px solid #d5dce6;border-radius:8px;padding:10px;font-size:13px}
+.section{background:#fff;border:1px solid #d5dce6;border-radius:12px;padding:13px;margin:16px 0;box-shadow:0 2px 5px #1720330a}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.section-title small{color:#475569;font-size:12px}
+.filters{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.filters button{font-size:12px;padding:9px 10px}
+.filters button.active{background:#172033;color:#fff}
+.filters button[data-filter="STRONG_BUY"].active,.filters button[data-filter="BUY"].active{background:#087f5b}
+.filters button[data-filter="STRONG_SELL"].active,.filters button[data-filter="SELL"].active{background:#c92a2a}
+.tablewrap{overflow-x:auto;border:1px solid #d5dce6;border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:850px;font-size:13px;background:#fff}
+th,td{padding:10px 9px;border-bottom:1px solid #e2e8f0;text-align:left;white-space:nowrap}
+th{background:#e2e8f0;font-weight:800}
 tbody tr:nth-child(even){background:#f8fafc}
-.tag{display:inline-block;padding:5px 7px;border-radius:5px;margin:2px;font-weight:bold;white-space:nowrap}
-.STRONG_BUY,.BUY{background:#d8f3dc;color:#176b3a}
-.STRONG_SELL,.SELL{background:#ffe0e0;color:#b42318}
-.WATCH_UP{background:#fff0c2;color:#805b00}
-.WATCH_DOWN{background:#ffead5;color:#9a3412}
-.good{color:#087f5b;font-weight:bold}
-.bad{color:#c92a2a;font-weight:bold}
-.neutral{color:#64748b}
-.empty{text-align:center;color:#64748b;padding:20px}
-.small{font-size:11px;color:#64748b}
+.buy{color:#087f5b;font-weight:800}
+.sell{color:#c92a2a;font-weight:800}
+.neutral{color:#334155}
+.empty{padding:18px;text-align:center;color:#334155}
+.small{font-size:12px;color:#475569}
+.good{color:#087f5b;font-weight:800}
+.bad{color:#c92a2a;font-weight:800}
 </style>
 </head>
 <body>
-<h1>Binance Spot AL-SAT Tarayıcı</h1>
-<p>1 saatlik sinyaller · 4 saatlik EMA200 filtresi · Bağımsız yöntemler</p>
+<h1>Kripto Al-Sat Tarayıcı</h1>
+<p>Binance Spot USDT pariteleri · 1 saatlik teknik analiz · AL için 4 saatlik EMA200 filtresi</p>
 
 <button id="scanBtn" class="primary" onclick="startScan()">TARAMAYI BAŞLAT</button>
-<div id="status">Tarama başlatılmaya hazır.</div>
+<div id="status">Tarama başlatılmaya hazır. Verileri almak için düğmeye bas.</div>
 
 <div class="summary">
-  <div class="pill">Pariteler: <b id="scanned">0</b></div>
-  <div class="pill">AL sinyalli coin: <b id="buyCount">0</b></div>
-  <div class="pill">SAT sinyalli coin: <b id="sellCount">0</b></div>
-  <div class="pill">24s test sinyali: <b id="testCount">0</b></div>
-  <div class="pill">Son tarama: <b id="lastScan">-</b></div>
+  <div class="pill">Taranan: <b id="scanned">0</b></div>
+  <div class="pill">Anlık sinyal: <b id="liveCount">0</b></div>
+  <div class="pill">Son saat kapanışı: <b id="closedCount">0</b></div>
+  <div class="pill">24s test kaydı: <b id="historyCount">0</b></div>
+  <div class="pill">Son tarama: <b id="lastScan">Henüz yok</b></div>
 </div>
 
 <div class="section">
-  <div class="head">
+  <div class="section-title">
     <h2>1. ANLIK SİNYALLER</h2>
-    <span class="small">Devam eden mum · Geçici sonuç</span>
+    <small>Devam eden saatlik mum · Sinyaller değişebilir</small>
   </div>
   <div class="filters" data-panel="live">
     <button class="active" data-filter="ALL">Tümü</button>
@@ -64,19 +66,17 @@ tbody tr:nth-child(even){background:#f8fafc}
     <button data-filter="BUY">AL</button>
     <button data-filter="STRONG_SELL">Güçlü SAT</button>
     <button data-filter="SELL">SAT</button>
-    <button data-filter="WATCH_UP">Yükseliş takibi</button>
-    <button data-filter="WATCH_DOWN">Düşüş takibi</button>
   </div>
-  <div class="wrap"><table>
-    <thead><tr><th>Parite</th><th>Sinyal</th><th>Sinyal üreten yöntemler</th><th>Güncel fiyat</th><th>24s hacim (USDT)</th><th>RSI</th><th>4s EMA200</th></tr></thead>
-    <tbody id="liveRows"><tr><td colspan="7" class="empty">Tarama bekleniyor.</td></tr></tbody>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Güncel fiyat</th><th>24s hacim (USDT)</th><th>RSI</th><th>4s EMA200</th></tr></thead>
+    <tbody id="liveRows"><tr><td colspan="7" class="empty">Henüz tarama yapılmadı.</td></tr></tbody>
   </table></div>
 </div>
 
 <div class="section">
-  <div class="head">
+  <div class="section-title">
     <h2>2. SON SAAT KAPANIŞI</h2>
-    <span class="small">Son tamamlanmış 1 saatlik mum</span>
+    <small>Son tamamlanmış 1 saatlik mum</small>
   </div>
   <div class="filters" data-panel="closed">
     <button class="active" data-filter="ALL">Tümü</button>
@@ -84,572 +84,503 @@ tbody tr:nth-child(even){background:#f8fafc}
     <button data-filter="BUY">AL</button>
     <button data-filter="STRONG_SELL">Güçlü SAT</button>
     <button data-filter="SELL">SAT</button>
-    <button data-filter="WATCH_UP">Yükseliş takibi</button>
-    <button data-filter="WATCH_DOWN">Düşüş takibi</button>
   </div>
-  <div class="wrap"><table>
-    <thead><tr><th>Parite</th><th>Sinyal</th><th>Sinyal üreten yöntemler</th><th>Kapanış fiyatı</th><th>24s hacim (USDT)</th><th>RSI</th><th>4s EMA200</th></tr></thead>
-    <tbody id="closedRows"><tr><td colspan="7" class="empty">Tarama bekleniyor.</td></tr></tbody>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Kapanış fiyatı</th><th>24s hacim (USDT)</th><th>RSI</th><th>4s EMA200</th></tr></thead>
+    <tbody id="closedRows"><tr><td colspan="7" class="empty">Henüz tarama yapılmadı.</td></tr></tbody>
   </table></div>
 </div>
 
 <div class="section">
-  <div class="head">
-    <h2>3. SON 24 SAAT BACKTEST</h2>
-    <button onclick="downloadCSV()">CSV indir</button>
+  <div class="section-title">
+    <h2>3. SON 24 SAAT TESTİ</h2>
+    <small>Sinyal mumunun kapanışı → sonraki saatlik mumun kapanışı</small>
   </div>
-  <p>Her sinyalin giriş fiyatı, sinyalden sonraki bir saatlik mumun kapanış fiyatıyla karşılaştırılır. Komisyon hesaba katılmaz.</p>
-  <div class="filters" data-panel="test">
+  <p class="small">Komisyon hesaba katılmaz. AL için fiyatın yükselmesi, SAT için düşmesi başarılı sonuç sayılır. SAT, spotta gerçek açığa satış kazancı değildir.</p>
+  <div class="filters" data-panel="history">
     <button class="active" data-filter="ALL">Tümü</button>
     <button data-filter="STRONG_BUY">Güçlü AL</button>
     <button data-filter="BUY">AL</button>
     <button data-filter="STRONG_SELL">Güçlü SAT</button>
     <button data-filter="SELL">SAT</button>
   </div>
-  <div class="wrap"><table>
-    <thead><tr><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Sinyal zamanı</th><th>Giriş fiyatı</th><th>Sonraki kapanış</th><th>Fiyat değişimi</th><th>Yön sonucu</th></tr></thead>
-    <tbody id="testRows"><tr><td colspan="8" class="empty">Henüz backtest yok.</td></tr></tbody>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Sinyal zamanı</th><th>Giriş</th><th>Sonraki saat kapanışı</th><th>Değişim</th><th>Sonuç</th></tr></thead>
+    <tbody id="historyRows"><tr><td colspan="8" class="empty">Henüz test yapılmadı.</td></tr></tbody>
   </table></div>
 </div>
 
 <div class="section">
   <h2>4. YÖNTEM PERFORMANSI</h2>
-  <p>Her yöntemin son 24 saatteki sonuçları ayrı hesaplanır. AL için sonraki kapanışın yükselmesi, SAT için düşmesi olumlu yön sonucu sayılır.</p>
-  <div class="wrap"><table>
-    <thead><tr><th>Yöntem</th><th>Sinyal sayısı</th><th>Olumlu</th><th>Olumsuz</th><th>Değişmedi</th><th>Başarı oranı</th><th>Ortalama fiyat değişimi</th></tr></thead>
-    <tbody id="performanceRows"><tr><td colspan="7" class="empty">Henüz veri yok.</td></tr></tbody>
+  <p class="small">Son 24 saatte sinyal üreten yöntemlerin, sonraki tamamlanmış saatlik mum kapanışına göre sonucu.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Yöntem</th><th>Sinyal sayısı</th><th>Başarılı</th><th>Başarısız</th><th>Başarı oranı</th><th>Ort. fiyat değişimi</th></tr></thead>
+    <tbody id="performanceRows"><tr><td colspan="6" class="empty">Henüz test yapılmadı.</td></tr></tbody>
   </table></div>
+  <button onclick="exportCSV()" style="margin-top:12px">24 Saat Testini CSV İndir</button>
 </div>
 
 <p class="small">
-AL 1: EMA20/EMA50 desteğinden dönüş · AL 2: EMA20/EMA50 yukarı kesişimi · AL 3: Hacimli direnç kırılımı · AL 4: MACD + RSI momentum.
-<br>
-SAT 1: EMA20 desteği kaybı · SAT 2: EMA aşağı kesişimi · SAT 3: Hacimli destek kırılımı · SAT 4: MACD + RSI aşağı momentum.
-<br>
-Güçlü AL/SAT, daha kuvvetli teyit koşullarını ifade eder; kâr garantisi değildir.
-SAT backtest sonucu yönün aşağı gidip gitmediğini ölçer; spot açığa satış kârı değildir.
+Bu araç yalnızca analiz yapar; otomatik alım-satım yapmaz. Sinyaller kesin kâr garantisi değildir. API sınırları nedeniyle bazı paritelerin verileri alınamayabilir.
 </p>
 
 <script>
 "use strict";
 
-const BASES=[
- "https://data-api.binance.vision",
- "https://api.binance.com"
-];
-const DAY=24*60*60*1000;
-let busy=false;
-let liveData=[],closedData=[],testData=[];
-let filters={live:"ALL",closed:"ALL",test:"ALL"};
+const API="https://data-api.binance.vision";
+const ONE_DAY=24*60*60*1000;
+let isScanning=false;
+let liveResults=[],closedResults=[],historyResults=[],performanceResults=[];
+let filters={live:"ALL",closed:"ALL",history:"ALL"};
 
-const methodNames={
- AL1:"AL 1 · EMA desteğinden dönüş",
- AL2:"AL 2 · EMA yukarı kesişimi",
- AL3:"AL 3 · Hacimli direnç kırılımı",
- AL4:"AL 4 · MACD + RSI momentum",
- SAT1:"SAT 1 · EMA20 desteği kaybı",
- SAT2:"SAT 2 · EMA aşağı kesişimi",
- SAT3:"SAT 3 · Hacimli destek kırılımı",
- SAT4:"SAT 4 · MACD + RSI momentum",
- WATCH_UP:"Yükseliş öncesi takip",
- WATCH_DOWN:"Düşüş öncesi takip"
-};
-const labels={
- STRONG_BUY:"GÜÇLÜ AL",BUY:"AL",
- STRONG_SELL:"GÜÇLÜ SAT",SELL:"SAT",
- WATCH_UP:"YÜKSELİŞ TAKİBİ",WATCH_DOWN:"DÜŞÜŞ TAKİBİ"
-};
-const performanceMethods=[
- "AL1","AL2","AL3","AL4","SAT1","SAT2","SAT3","SAT4"
-];
+function setStatus(s){document.getElementById("status").textContent=s;}
 
-function setStatus(s){
- document.getElementById("status").textContent=s;
-}
-
-async function getJSON(path){
- let lastError;
- for(const base of BASES){
+async function getJSON(url){
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),15000);
   try{
-   const response=await fetch(base+path,{
-    signal:controller.signal,cache:"no-store"
-   });
-   if(!response.ok)throw new Error("HTTP "+response.status);
-   return await response.json();
-  }catch(e){
-   lastError=e;
-  }finally{
-   clearTimeout(timer);
+    const response=await fetch(url,{signal:controller.signal});
+    if(!response.ok)throw new Error("HTTP "+response.status);
+    return await response.json();
+  }finally{clearTimeout(timer);}
+}
+
+function ema(values,period){
+  if(!values.length)return [];
+  const k=2/(period+1),out=[values[0]];
+  for(let i=1;i<values.length;i++)out.push(values[i]*k+out[i-1]*(1-k));
+  return out;
+}
+
+function rsiSeries(closes,period=14){
+  const out=Array(closes.length).fill(null);
+  if(closes.length<=period)return out;
+  let gains=0,losses=0;
+  for(let i=1;i<=period;i++){
+    const d=closes[i]-closes[i-1];
+    gains+=Math.max(d,0);losses+=Math.max(-d,0);
   }
- }
- throw new Error("Binance bağlantısı başarısız: "+(lastError?.message||"ağ hatası"));
+  let ag=gains/period,al=losses/period;
+  const calc=(g,l)=>l===0?(g===0?50:100):100-100/(1+g/l);
+  out[period]=calc(ag,al);
+  for(let i=period+1;i<closes.length;i++){
+    const d=closes[i]-closes[i-1];
+    ag=(ag*(period-1)+Math.max(d,0))/period;
+    al=(al*(period-1)+Math.max(-d,0))/period;
+    out[i]=calc(ag,al);
+  }
+  return out;
 }
 
-function ema(a,n){
- if(!a.length)return [];
- const k=2/(n+1),out=[a[0]];
- for(let i=1;i<a.length;i++)out.push(a[i]*k+out[i-1]*(1-k));
- return out;
+function prepareIndicators(candles){
+  const opens=candles.map(c=>Number(c[1]));
+  const highs=candles.map(c=>Number(c[2]));
+  const lows=candles.map(c=>Number(c[3]));
+  const closes=candles.map(c=>Number(c[4]));
+  const volumes=candles.map(c=>Number(c[5]));
+  const e20=ema(closes,20),e50=ema(closes,50);
+  const fast=ema(closes,12),slow=ema(closes,26);
+  const macd=closes.map((_,i)=>fast[i]-slow[i]);
+  const macdSignal=ema(macd,9);
+  const rsi=rsiSeries(closes,14);
+  return {opens,highs,lows,closes,volumes,e20,e50,macd,macdSignal,rsi};
 }
 
-function rsiSeries(a,n=14){
- const out=Array(a.length).fill(null);
- if(a.length<=n)return out;
- let gain=0,loss=0;
- for(let i=1;i<=n;i++){
-  const d=a[i]-a[i-1];
-  gain+=Math.max(d,0);
-  loss+=Math.max(-d,0);
- }
- gain/=n;loss/=n;
- const calc=(g,l)=>l===0?(g===0?50:100):100-100/(1+g/l);
- out[n]=calc(gain,loss);
- for(let i=n+1;i<a.length;i++){
-  const d=a[i]-a[i-1];
-  gain=(gain*(n-1)+Math.max(d,0))/n;
-  loss=(loss*(n-1)+Math.max(-d,0))/n;
-  out[i]=calc(gain,loss);
- }
- return out;
+function avgVolume(volumes,i,n=20){
+  const start=Math.max(0,i-n);
+  const arr=volumes.slice(start,i);
+  return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;
 }
 
-function indicators(c){
- const close=c.map(x=>+x[4]);
- const high=c.map(x=>+x[2]);
- const low=c.map(x=>+x[3]);
- const volume=c.map(x=>+x[5]);
- const e20=ema(close,20),e50=ema(close,50);
- const e12=ema(close,12),e26=ema(close,26);
- const macd=close.map((_,i)=>e12[i]-e26[i]);
- const macdSignal=ema(macd,9);
- return {
-  close,high,low,volume,e20,e50,macd,macdSignal,
-  rsi:rsiSeries(close)
- };
+function maxRange(values,start,end){
+  let m=-Infinity;
+  for(let j=start;j<end;j++)if(values[j]>m)m=values[j];
+  return m;
 }
 
-function average(a,start,end){
- const values=a.slice(Math.max(0,start),end);
- return values.length?values.reduce((s,v)=>s+v,0)/values.length:0;
+function minRange(values,start,end){
+  let m=Infinity;
+  for(let j=start;j<end;j++)if(values[j]<m)m=values[j];
+  return m;
 }
 
-function highest(a,start,end){
- const values=a.slice(Math.max(0,start),end);
- return values.length?Math.max(...values):-Infinity;
+function getBuySignalsAt(i,d,trendOK){
+  const out=[];
+  if(!trendOK||i<30||d.rsi[i]==null||d.rsi[i-1]==null)return out;
+
+  const p=i-1,c=d.closes[i],pc=d.closes[p],r=d.rsi[i];
+  const e20=d.e20[i],e50=d.e50[i];
+  const prev20=d.e20[p],prev50=d.e50[p];
+  const macdUp=d.macd[i]>d.macdSignal[i];
+  const avgV=avgVolume(d.volumes,i);
+  const volRatio=avgV>0?d.volumes[i]/avgV:0;
+  const bullish=d.closes[i]>d.opens[i];
+  const crossUp=prev20<=prev50&&e20>e50;
+
+  // 1. EMA20/EMA50 geri çekilme ve destekten dönüş.
+  const wasAbove=pc>prev20&&pc>prev50;
+  const touch20=d.lows[i]<=e20*1.002;
+  const touch50=d.lows[i]<=e50*1.002;
+  const recovered=c>e20&&c>e50&&c>pc&&bullish;
+  if(wasAbove&&(touch20||touch50)&&recovered){
+    out.push({
+      method:"EMA20/EMA50 destek dönüşü",
+      key:(r>=55&&macdUp)?"STRONG_BUY":"BUY"
+    });
+  }
+
+  // 2. EMA20'nin EMA50'yi yukarı kesmesi.
+  if(crossUp){
+    out.push({
+      method:"EMA20 yukarı kesişim",
+      key:(r>=55&&macdUp)?"STRONG_BUY":"BUY"
+    });
+  }
+
+  // 3. Önceki 20 mumun tepesinin hacimle kırılması.
+  const resistance=maxRange(d.highs,i-20,i);
+  if(c>resistance&&volRatio>=1.5){
+    out.push({
+      method:"Hacimli direnç kırılımı",
+      key:(volRatio>=1.8&&r>=55)?"STRONG_BUY":"BUY"
+    });
+  }
+
+  // 4. MACD ve RSI yükseliş momentumu.
+  if(macdUp&&d.macd[i]>0&&r>=50&&r>d.rsi[p]){
+    out.push({
+      method:"MACD + RSI momentumu",
+      key:(r>=60&&d.macd[i]>d.macd[p])?"STRONG_BUY":"BUY"
+    });
+  }
+
+  return out;
 }
 
-function lowest(a,start,end){
- const values=a.slice(Math.max(0,start),end);
- return values.length?Math.min(...values):Infinity;
+function getSellSignalAt(i,d){
+  if(i<30||d.rsi[i]==null||d.rsi[i-1]==null)return null;
+
+  const p=i-1,c=d.closes[i],r=d.rsi[i];
+  const e20=d.e20[i],e50=d.e50[i];
+  const crossDown=d.e20[p]>=d.e50[p]&&e20<e50;
+  const avgV=avgVolume(d.volumes,i);
+  const volRatio=avgV>0?d.volumes[i]/avgV:0;
+  const support=minRange(d.lows,i-20,i);
+
+  let score=0;
+  const reasons=[];
+
+  if(c<e20){score++;reasons.push("EMA20 altı");}
+  if(c<e50){score++;reasons.push("EMA50 altı");}
+  if(crossDown){score++;reasons.push("EMA aşağı kesişim");}
+  if(d.macd[i]<d.macdSignal[i]&&r<45){
+    score++;reasons.push("MACD + RSI düşüşü");
+  }
+  if(c<support&&volRatio>=1.5){
+    score+=2;reasons.push("Hacimli destek kırılımı");
+  }
+
+  if(score<2)return null;
+  return {
+    key:score>=3?"STRONG_SELL":"SELL",
+    method:"Birleşik teknik analiz ("+reasons.join(", ")+")"
+  };
 }
 
-function candleIsClosed(c){
- return +c[6]<Date.now();
+function trendAtTime(candles4,ema4,time){
+  let index=-1;
+  for(let i=0;i<candles4.length;i++){
+    if(Number(candles4[i][6])<=time)index=i;
+    else break;
+  }
+  if(index<199)return false;
+  return Number(candles4[index][4])>ema4[index];
 }
 
-function trendAt(c4,e4,time){
- let index=-1;
- for(let i=0;i<c4.length;i++){
-  if(+c4[i][6]<=time)index=i;
-  else break;
- }
- return index>=199&&+c4[index][4]>e4[index];
+function signalLabel(key){
+  return ({
+    STRONG_BUY:"GÜÇLÜ AL",BUY:"AL",
+    STRONG_SELL:"GÜÇLÜ SAT",SELL:"SAT"
+  })[key]||key;
 }
 
-function makeSignals(c,trendOK,i){
- const d=indicators(c),p=i-1;
- if(i<55||p<1||d.rsi[i]==null||d.rsi[p]==null){
-  return {signals:[],rsi:d.rsi[i]||0};
- }
-
- const close=d.close[i],prev=d.close[p];
- const r=d.rsi[i],rp=d.rsi[p];
- const volAvg=average(d.volume,i-20,i);
- const volRatio=volAvg>0?d.volume[i]/volAvg:0;
- const bullish=close>+c[i][1];
- const bearish=close<+c[i][1];
- const macdUp=d.macd[i]>d.macdSignal[i];
- const macdDown=d.macd[i]<d.macdSignal[i];
- const hist=d.macd[i]-d.macdSignal[i];
- const prevHist=d.macd[p]-d.macdSignal[p];
- const signals=[];
-
- function add(method,side,strong){
-  const key=side==="BUY"
-   ?(strong?"STRONG_BUY":"BUY")
-   :(strong?"STRONG_SELL":"SELL");
-  signals.push({method,side,key});
- }
-
- // AL 1: önceki mum EMA20 ve EMA50 üzerindeyken
- // bu mum EMA bölgesini test eder ve iki EMA üzerinde kapanır.
- const previousAbove=d.close[p]>d.e20[p]&&d.close[p]>d.e50[p];
- const touched=d.low[i]<=d.e20[i]*1.002||
-               d.low[i]<=d.e50[i]*1.002;
- const recovered=close>d.e20[i]&&close>d.e50[i]&&
-                 close>prev&&bullish;
- if(trendOK&&previousAbove&&touched&&recovered){
-  add("AL1","BUY",r>=55&&macdUp&&volRatio>=1);
- }
-
- // AL 2: EMA20, EMA50'yi yukarı keser.
- const crossUp=d.e20[p]<=d.e50[p]&&d.e20[i]>d.e50[i];
- if(trendOK&&crossUp&&close>d.e20[i]&&macdUp&&r>=40){
-  add("AL2","BUY",r>=55&&hist>prevHist&&volRatio>=1);
- }
-
- // AL 3: Önceki 20 mumun en yüksek seviyesi aşılır.
- const resistance=highest(d.high,i-20,i);
- if(trendOK&&close>resistance&&volRatio>=1.5){
-  add("AL3","BUY",volRatio>=2&&r>=55&&macdUp);
- }
-
- // AL 4: MACD ve RSI yükseliş momentumu.
- if(trendOK&&hist>0&&hist>prevHist&&r>rp&&r>=50&&macdUp){
-  add("AL4","BUY",r>=58&&volRatio>=1&&hist>prevHist);
- }
-
- // SAT 1: EMA20 desteği kapanışla kaybedilir.
- if(d.close[p]>=d.e20[p]&&close<d.e20[i]&&bearish){
-  add("SAT1","SELL",close<d.e50[i]||volRatio>=1.5);
- }
-
- // SAT 2: EMA20, EMA50'yi aşağı keser.
- const crossDown=d.e20[p]>=d.e50[p]&&d.e20[i]<d.e50[i];
- if(crossDown&&close<d.e20[i]&&macdDown){
-  add("SAT2","SELL",close<d.e50[i]&&r<45);
- }
-
- // SAT 3: Önceki 20 mumun en düşük seviyesi kırılır.
- const support=lowest(d.low,i-20,i);
- if(close<support&&volRatio>=1.5){
-  add("SAT3","SELL",volRatio>=2&&r<45&&macdDown);
- }
-
- // SAT 4: MACD ve RSI aşağı yönlü momentumu doğrular.
- if(hist<0&&hist<prevHist&&r<rp&&r<50&&macdDown){
-  add("SAT4","SELL",r<=40&&volRatio>=1);
- }
-
- // Takip uyarıları AL/SAT değildir.
- const gap=Math.abs(d.e20[i]-d.e50[i])/close;
- const oldGap=Math.abs(d.e20[p]-d.e50[p])/prev;
- if(trendOK&&d.e20[i]<=d.e50[i]&&gap<oldGap&&gap<0.008&&
-    d.macd[i]>d.macd[p]&&r>rp&&r>=40&&r<=60&&volRatio>=1){
-  signals.push({method:"WATCH_UP",side:"WATCH",key:"WATCH_UP"});
- }
- if(d.e20[i]>=d.e50[i]&&gap<oldGap&&gap<0.008&&
-    d.macd[i]<d.macd[p]&&r<rp&&r>=40&&r<=60&&volRatio>=1){
-  signals.push({method:"WATCH_DOWN",side:"WATCH",key:"WATCH_DOWN"});
- }
-
- return {signals,rsi:r};
+function signalClass(key){
+  return key==="STRONG_BUY"||key==="BUY"?"buy":"sell";
 }
 
-function aggregateSignals(signals){
- const map=new Map();
- for(const s of signals){
-  const id=s.method+"|"+s.key;
-  if(!map.has(id))map.set(id,s);
- }
- return [...map.values()];
+function formatPrice(n){
+  if(!Number.isFinite(n))return "-";
+  if(n===0)return "0";
+  if(n<1)return n.toFixed(8).replace(/0+$/,"").replace(/\.$/,"");
+  return n.toLocaleString("en-US",{maximumFractionDigits:6});
 }
 
-function priceFormat(n){
- if(!Number.isFinite(n))return "-";
- if(n!==0&&Math.abs(n)<1){
-  return n.toFixed(8).replace(/0+$/,"").replace(/\.$/,"");
- }
- return n.toLocaleString("en-US",{maximumFractionDigits:5});
+function formatVolume(n){
+  return Number(n||0).toLocaleString("en-US",{maximumFractionDigits:0});
 }
 
-function volumeFormat(n){
- return Number(n||0).toLocaleString("en-US",{maximumFractionDigits:0});
-}
+function formatTime(t){return new Date(t).toLocaleString("tr-TR");}
+function pct(n){return (n>0?"+":"")+n.toFixed(2)+"%";}
 
-function timeFormat(t){
- return new Date(t).toLocaleString("tr-TR");
-}
+function renderPanel(panel,data){
+  const id=panel==="live"?"liveRows":panel==="closed"?"closedRows":"historyRows";
+  const tbody=document.getElementById(id);
+  const filter=filters[panel];
+  const rows=data.filter(r=>filter==="ALL"||r.key===filter)
+    .sort((a,b)=>{
+      const order={STRONG_BUY:0,BUY:1,STRONG_SELL:2,SELL:3};
+      return order[a.key]-order[b.key]||a.symbol.localeCompare(b.symbol);
+    });
 
-function escapeHTML(s){
- return String(s).replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- })[c]);
-}
+  if(!rows.length){
+    const colspan=panel==="history"?8:7;
+    tbody.innerHTML=`<tr><td colspan="${colspan}" class="empty">Bu filtrede sinyal bulunamadı.</td></tr>`;
+    return;
+  }
 
-function signalTags(signals){
- if(!signals.length)return "-";
- const rank={STRONG_BUY:0,BUY:1,STRONG_SELL:2,SELL:3,WATCH_UP:4,WATCH_DOWN:5};
- const keys=[...new Set(signals.map(s=>s.key))].sort((a,b)=>rank[a]-rank[b]);
- return keys.map(k=>`<span class="tag ${k}">${labels[k]}</span>`).join("");
-}
-
-function methodText(signals){
- if(!signals.length)return "-";
- return aggregateSignals(signals).map(s=>
-  escapeHTML(methodNames[s.method]||s.method)+" — "+escapeHTML(labels[s.key])
- ).join("<br>");
-}
-
-function matches(row,filter){
- return filter==="ALL"||row.signals.some(s=>s.key===filter);
-}
-
-function renderSignalPanel(panel,data){
- const body=document.getElementById(panel==="live"?"liveRows":"closedRows");
- const rows=data.filter(r=>matches(r,filters[panel]));
- if(!rows.length){
-  body.innerHTML='<tr><td colspan="7" class="empty">Bu filtrede sinyal bulunamadı.</td></tr>';
-  return;
- }
- body.innerHTML=rows.map(r=>`
- <tr>
-  <td><b>${escapeHTML(r.symbol)}</b></td>
-  <td>${signalTags(r.signals)}</td>
-  <td>${methodText(r.signals)}</td>
-  <td>${priceFormat(r.price)}</td>
-  <td>${volumeFormat(r.volume)}</td>
-  <td>${Number(r.rsi||0).toFixed(1)}</td>
-  <td class="${r.trendOK?"good":"bad"}">${r.trendOK?"ÜZERİNDE":"ALTINDA"}</td>
- </tr>`).join("");
-}
-
-function renderBacktest(){
- const body=document.getElementById("testRows");
- const rows=testData.filter(r=>filters.test==="ALL"||r.key===filters.test);
- if(!rows.length){
-  body.innerHTML='<tr><td colspan="8" class="empty">Seçilen filtrede backtest sonucu yok.</td></tr>';
-  return;
- }
- body.innerHTML=rows.map(r=>`
- <tr>
-  <td><b>${escapeHTML(r.symbol)}</b></td>
-  <td><span class="tag ${r.key}">${labels[r.key]}</span></td>
-  <td>${escapeHTML(methodNames[r.method])}</td>
-  <td>${timeFormat(r.time)}</td>
-  <td>${priceFormat(r.entry)}</td>
-  <td>${priceFormat(r.exit)}</td>
-  <td class="${r.change>0?"good":r.change<0?"bad":"neutral"}">${r.change.toFixed(3)}%</td>
-  <td class="${r.result==="Olumlu"?"good":r.result==="Olumsuz"?"bad":"neutral"}">${r.result}</td>
- </tr>`).join("");
+  tbody.innerHTML=rows.map(r=>{
+    if(panel==="history"){
+      const favorable=r.favorable;
+      return `<tr>
+        <td><b>${r.symbol}</b></td>
+        <td class="${signalClass(r.key)}">${signalLabel(r.key)}</td>
+        <td>${r.method}</td>
+        <td>${formatTime(r.time)}</td>
+        <td>${formatPrice(r.entry)}</td>
+        <td>${formatPrice(r.exit)}</td>
+        <td class="${r.changePct>=0?"good":"bad"}">${pct(r.changePct)}</td>
+        <td class="${favorable?"good":"bad"}">${favorable?"BAŞARILI":"BAŞARISIZ"}</td>
+      </tr>`;
+    }
+    const price=panel==="closed"?r.close:r.price;
+    return `<tr>
+      <td><b>${r.symbol}</b></td>
+      <td class="${signalClass(r.key)}">${signalLabel(r.key)}</td>
+      <td>${r.method}</td>
+      <td>${formatPrice(price)}</td>
+      <td>${formatVolume(r.quoteVolume)}</td>
+      <td>${Number(r.rsi).toFixed(1)}</td>
+      <td class="${r.trendOK?"buy":"sell"}">${r.trendOK?"ÜZERİNDE":"ALTINDA"}</td>
+    </tr>`;
+  }).join("");
 }
 
 function renderPerformance(){
- const body=document.getElementById("performanceRows");
- body.innerHTML=performanceMethods.map(method=>{
-  const rows=testData.filter(r=>r.method===method);
-  const good=rows.filter(r=>r.result==="Olumlu").length;
-  const bad=rows.filter(r=>r.result==="Olumsuz").length;
-  const flat=rows.filter(r=>r.result==="Değişmedi").length;
-  const decisive=good+bad;
-  const rate=decisive?100*good/decisive:0;
-  const avg=rows.length?rows.reduce((s,r)=>s+r.change,0)/rows.length:0;
-  return `<tr>
-   <td>${escapeHTML(methodNames[method])}</td>
-   <td>${rows.length}</td><td class="good">${good}</td>
-   <td class="bad">${bad}</td><td>${flat}</td>
-   <td>${decisive?rate.toFixed(1)+"%":"-"}</td>
-   <td class="${avg>0?"good":avg<0?"bad":"neutral"}">${rows.length?avg.toFixed(3)+"%":"-"}</td>
-  </tr>`;
- }).join("");
+  const tbody=document.getElementById("performanceRows");
+  const methods=[
+    "EMA20/EMA50 destek dönüşü",
+    "EMA20 yukarı kesişim",
+    "Hacimli direnç kırılımı",
+    "MACD + RSI momentumu",
+    "Birleşik teknik analiz"
+  ];
+
+  performanceResults=methods.map(method=>{
+    const rows=historyResults.filter(r=>r.method===method);
+    const wins=rows.filter(r=>r.favorable).length;
+    const losses=rows.length-wins;
+    const success=rows.length?wins/rows.length*100:0;
+    const avg=rows.length?rows.reduce((s,r)=>s+r.changePct,0)/rows.length:0;
+    return {method,total:rows.length,wins,losses,success,avg};
+  });
+
+  tbody.innerHTML=performanceResults.map(p=>`
+    <tr>
+      <td>${p.method}</td><td>${p.total}</td><td class="good">${p.wins}</td>
+      <td class="bad">${p.losses}</td><td>${p.total?p.success.toFixed(1)+"%":"-"}</td>
+      <td class="${p.avg>=0?"good":"bad"}">${p.total?pct(p.avg):"-"}</td>
+    </tr>`).join("");
 }
 
-function render(){
- renderSignalPanel("live",liveData);
- renderSignalPanel("closed",closedData);
- renderBacktest();
- renderPerformance();
- document.getElementById("buyCount").textContent=
-  liveData.filter(r=>r.signals.some(s=>s.side==="BUY")).length;
- document.getElementById("sellCount").textContent=
-  liveData.filter(r=>r.signals.some(s=>s.side==="SELL")).length;
- document.getElementById("testCount").textContent=testData.length;
+function renderAll(){
+  renderPanel("live",liveResults);
+  renderPanel("closed",closedResults);
+  renderPanel("history",historyResults);
+  renderPerformance();
+  document.getElementById("liveCount").textContent=liveResults.length;
+  document.getElementById("closedCount").textContent=closedResults.length;
+  document.getElementById("historyCount").textContent=historyResults.length;
 }
 
 document.querySelectorAll(".filters").forEach(group=>{
- group.querySelectorAll("button").forEach(button=>{
-  button.addEventListener("click",()=>{
-   const panel=group.dataset.panel;
-   filters[panel]=button.dataset.filter;
-   group.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
-   button.classList.add("active");
-   if(panel==="test")renderBacktest();
-   else renderSignalPanel(panel,panel==="live"?liveData:closedData);
+  group.querySelectorAll("button").forEach(button=>{
+    button.addEventListener("click",()=>{
+      const panel=group.dataset.panel;
+      filters[panel]=button.dataset.filter;
+      group.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+      button.classList.add("active");
+      renderPanel(panel,panel==="live"?liveResults:panel==="closed"?closedResults:historyResults);
+    });
   });
- });
 });
 
-function downloadCSV(){
- const rows=[[
-  "Parite","Sinyal","Yöntem","Sinyal zamanı",
-  "Giriş fiyatı","Sonraki kapanış","Fiyat değişimi (%)","Yön sonucu"
- ]];
- testData.forEach(r=>rows.push([
-  r.symbol,labels[r.key],methodNames[r.method],timeFormat(r.time),
-  r.entry,r.exit,r.change.toFixed(5),r.result
- ]));
- const quote=x=>'"'+String(x??"").replace(/"/g,'""')+'"';
- const csv="\uFEFF"+rows.map(row=>row.map(quote).join(";")).join("\r\n");
- const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;a.download="binance_spot_24s_backtest.csv";
- a.click();
- setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
 async function startScan(){
- if(busy)return;
- busy=true;
- const btn=document.getElementById("scanBtn");
- btn.disabled=true;btn.textContent="TARANIYOR...";
- liveData=[];closedData=[];testData=[];
- render();
- document.getElementById("scanned").textContent="0";
- setStatus("Binance Spot pariteleri alınıyor...");
+  if(isScanning)return;
+  isScanning=true;
+  const btn=document.getElementById("scanBtn");
+  btn.disabled=true;
+  btn.textContent="TARANIYOR...";
+  liveResults=[];closedResults=[];historyResults=[];
+  renderAll();
+  document.getElementById("scanned").textContent="0";
+  setStatus("Binance Spot pariteleri alınıyor...");
 
- try{
-  const exchange=await getJSON("/api/v3/exchangeInfo");
-  if(!exchange||!Array.isArray(exchange.symbols)){
-   throw new Error("Binance parite listesi okunamadı.");
-  }
+  try{
+    const exchange=await getJSON(API+"/api/v3/exchangeInfo");
+    if(!exchange.symbols)throw new Error("Spot parite listesi alınamadı.");
 
-  const symbols=exchange.symbols
-   .filter(s=>s.status==="TRADING"&&s.quoteAsset==="USDT"&&s.isSpotTradingAllowed===true)
-   .map(s=>s.symbol)
-   .filter(s=>!/(UP|DOWN|BULL|BEAR)USDT$/.test(s));
+    const symbols=exchange.symbols
+      .filter(s=>s.status==="TRADING"&&s.quoteAsset==="USDT"&&s.isSpotTradingAllowed)
+      .filter(s=>!/(UP|DOWN|BULL|BEAR|[235]L|[235]S)USDT$/.test(s.symbol))
+      .map(s=>s.symbol);
 
-  if(!symbols.length)throw new Error("USDT Spot parite listesi boş.");
+    if(!symbols.length)throw new Error("USDT paritesi bulunamadı.");
 
-  const ticker=await getJSON("/api/v3/ticker/24hr");
-  const tickerMap={};
-  ticker.forEach(t=>tickerMap[t.symbol]={
-   price:+t.lastPrice,volume:+t.quoteVolume
-  });
+    const ticker=await getJSON(API+"/api/v3/ticker/24hr");
+    const tickerMap={};
+    ticker.forEach(t=>tickerMap[t.symbol]={
+      price:Number(t.lastPrice),quoteVolume:Number(t.quoteVolume)
+    });
 
-  let cursor=0,completed=0,errors=0;
-  const live=[],closed=[],backtest=[];
-  const cutoff=Date.now()-DAY;
-  setStatus(`${symbols.length} Spot USDT paritesi bulundu. Tarama başladı...`);
+    let completed=0,errors=0,cursor=0;
+    const live=[],closed=[],historical=[];
+    const cutoff=Date.now()-ONE_DAY;
+    const workerCount=3;
 
-  async function worker(){
-   while(cursor<symbols.length){
-    const symbol=symbols[cursor++];
-    try{
-     const [k1,k4]=await Promise.all([
-      getJSON(`/api/v3/klines?symbol=${symbol}&interval=1h&limit=100`),
-      getJSON(`/api/v3/klines?symbol=${symbol}&interval=4h&limit=220`)
-     ]);
+    setStatus(`${symbols.length} Spot USDT paritesi bulundu. Tarama başladı...`);
 
-     if(!Array.isArray(k1)||!Array.isArray(k4)){
-      throw new Error("Mum verisi hatalı.");
-     }
+    async function worker(){
+      while(cursor<symbols.length){
+        const symbol=symbols[cursor++];
+        try{
+          const [k1,k4]=await Promise.all([
+            getJSON(`${API}/api/v3/klines?symbol=${symbol}&interval=1h&limit=100`),
+            getJSON(`${API}/api/v3/klines?symbol=${symbol}&interval=4h&limit=220`)
+          ]);
 
-     const c4=k4.filter(candleIsClosed);
-     if(c4.length<200)throw new Error("4 saatlik veri yetersiz.");
-     const close4=c4.map(c=>+c[4]);
-     const ema4=ema(close4,200);
-     const trendOK=close4[close4.length-1]>ema4[ema4.length-1];
+          const now=Date.now();
+          const closed4=k4.filter(c=>Number(c[6])<now);
+          if(closed4.length<200)throw new Error("Yetersiz 4 saatlik veri");
+          const closes4=closed4.map(c=>Number(c[4]));
+          const e4=ema(closes4,200);
+          const trendOK=closes4[closes4.length-1]>e4[e4.length-1];
 
-     const c1=k1.filter(candleIsClosed);
-     if(c1.length<60)throw new Error("Saatlik veri yetersiz.");
+          const closed1=k1.filter(c=>Number(c[6])<now);
+          if(closed1.length<60)throw new Error("Yetersiz saatlik veri");
 
-     const t=tickerMap[symbol]||{
-      price:+c1[c1.length-1][4],volume:0
-     };
+          const d=prepareIndicators(closed1);
+          const last=closed1.length-1;
+          const lastCandle=closed1[last];
+          const lastTime=Number(lastCandle[6]);
+          const tickerInfo=tickerMap[symbol]||{price:Number(lastCandle[4]),quoteVolume:0};
 
-     // 1. Son kapanmış saatlik mum.
-     const last=c1.length-1;
-     const lastTime=+c1[last][6];
-     const lastResult=makeSignals(c1,trendOK,last);
-     if(lastResult.signals.length){
-      closed.push({
-       symbol,signals:aggregateSignals(lastResult.signals),
-       price:+c1[last][4],volume:t.volume,rsi:lastResult.rsi,
-       trendOK,time:lastTime
-      });
-     }
+          // Son tamamlanmış mumun sinyalleri.
+          const buySignals=getBuySignalsAt(last,d,trendOK);
+          const sellSignal=getSellSignalAt(last,d);
+          buySignals.forEach(s=>closed.push({
+            symbol,key:s.key,method:s.method,rsi:d.rsi[last],
+            close:d.closes[last],price:d.closes[last],
+            quoteVolume:tickerInfo.quoteVolume,trendOK,time:lastTime
+          }));
+          if(sellSignal)closed.push({
+            symbol,key:sellSignal.key,method:sellSignal.method,
+            rsi:d.rsi[last],close:d.closes[last],price:d.closes[last],
+            quoteVolume:tickerInfo.quoteVolume,trendOK,time:lastTime
+          });
 
-     // 2. Son 24 saatte oluşan sinyallerin bir sonraki
-     // kapanmış saatlik mumdaki sonucu.
-     // Son mumun henüz bir sonraki kapanışı olmadığı için atlanır.
-     const start=Math.max(55,c1.length-26);
-     for(let i=start;i<c1.length-1;i++){
-      const signalTime=+c1[i][6];
-      if(signalTime<cutoff)continue;
+          // Son 24 saatteki sinyaller. Sonraki mum da kapanmış olmalı.
+          const first=Math.max(30,closed1.length-25);
+          for(let i=first;i<closed1.length-1;i++){
+            const time=Number(closed1[i][6]);
+            if(time<cutoff)continue;
 
-      const histTrend=trendAt(c4,ema4,signalTime);
-      const result=makeSignals(c1,histTrend,i);
-      if(!result.signals.length)continue;
+            const historicalTrend=trendAtTime(closed4,e4,time);
+            const buys=getBuySignalsAt(i,d,historicalTrend);
+            const sell=getSellSignalAt(i,d);
+            const signals=buys.slice();
+            if(sell)signals.push(sell);
 
-      const entry=+c1[i][4];
-      const exit=+c1[i+1][4];
-      if(!(entry>0&&exit>0))continue;
+            signals.forEach(s=>{
+              const entry=d.closes[i];
+              const exit=d.closes[i+1];
+              const changePct=(exit-entry)/entry*100;
+              const isBuy=s.key==="BUY"||s.key==="STRONG_BUY";
+              historical.push({
+                symbol,key:s.key,method:s.method,time,
+                entry,exit,changePct,
+                favorable:isBuy?changePct>0:changePct<0
+              });
+            });
+          }
 
-      const change=(exit-entry)/entry*100;
-      for(const s of aggregateSignals(result.signals)){
-       if(!performanceMethods.includes(s.method))continue;
-       const directional=s.side==="BUY"?change:-change;
-       const outcome=Math.abs(directional)<0.0001
-        ?"Değişmedi":directional>0?"Olumlu":"Olumsuz";
-       backtest.push({
-        symbol,key:s.key,method:s.method,time:signalTime,
-        entry,exit,change,result:outcome
-       });
+          // Anlık sinyal: devam eden saatlik mum.
+          const liveD=prepareIndicators(k1);
+          const liveIndex=k1.length-1;
+          const liveBuys=getBuySignalsAt(liveIndex,liveD,trendOK);
+          const liveSell=getSellSignalAt(liveIndex,liveD);
+          liveBuys.forEach(s=>live.push({
+            symbol,key:s.key,method:s.method,rsi:liveD.rsi[liveIndex],
+            price:tickerInfo.price||liveD.closes[liveIndex],
+            close:liveD.closes[liveIndex],
+            quoteVolume:tickerInfo.quoteVolume,trendOK,
+            time:Number(k1[liveIndex][6])
+          }));
+          if(liveSell)live.push({
+            symbol,key:liveSell.key,method:liveSell.method,
+            rsi:liveD.rsi[liveIndex],
+            price:tickerInfo.price||liveD.closes[liveIndex],
+            close:liveD.closes[liveIndex],
+            quoteVolume:tickerInfo.quoteVolume,trendOK,
+            time:Number(k1[liveIndex][6])
+          });
+
+        }catch(e){errors++;}
+
+        completed++;
+        if(completed%5===0||completed===symbols.length){
+          document.getElementById("scanned").textContent=`${completed} / ${symbols.length}`;
+          setStatus(`Tarama sürüyor: ${completed}/${symbols.length} · Veri alınamayan: ${errors}`);
+        }
       }
-     }
-
-     // 3. Anlık sinyaller: mevcut, henüz kapanmamış mum.
-     const current=k1.length-1;
-     const liveResult=makeSignals(k1,trendOK,current);
-     if(liveResult.signals.length){
-      live.push({
-       symbol,signals:aggregateSignals(liveResult.signals),
-       price:t.price,volume:t.volume,rsi:liveResult.rsi,
-       trendOK,time:+k1[current][6]
-      });
-     }
-    }catch(e){
-     errors++;
     }
 
-    completed++;
-    document.getElementById("scanned").textContent=
-     `${completed} / ${symbols.length}`;
-    if(completed%5===0||completed===symbols.length){
-     setStatus(`Tarama sürüyor: ${completed}/${symbols.length} · Veri alınamayan: ${errors}`);
-    }
-   }
+    await Promise.all(Array.from({length:workerCount},()=>worker()));
+
+    liveResults=live;
+    closedResults=closed;
+    historyResults=historical.sort((a,b)=>b.time-a.time);
+    renderAll();
+    document.getElementById("lastScan").textContent=new Date().toLocaleTimeString("tr-TR");
+    setStatus(`Tarama tamamlandı. ${symbols.length} parite kontrol edildi; ${errors} paritede veri alınamadı. 24 saat testinde ${historyResults.length} sinyal değerlendirildi.`);
+  }catch(e){
+    setStatus("Tarama başarısız: "+(e.message||"Binance verilerine erişilemedi.")+" İnternet bağlantısını kontrol edip tekrar dene.");
+  }finally{
+    isScanning=false;
+    btn.disabled=false;
+    btn.textContent="TEKRAR TARA";
   }
-
-  await Promise.all(Array.from({length:3},()=>worker()));
-
-  liveData=live;
-  closedData=closed;
-  testData=backtest.sort((a,b)=>b.time-a.time);
-  render();
-  document.getElementById("lastScan").textContent=
-   new Date().toLocaleTimeString("tr-TR");
-
-  setStatus(
-   `Tarama tamamlandı. ${symbols.length} parite kontrol edildi. `+
-   `Veri alınamayan: ${errors}. Anlık sinyalli coin: ${live.length}. `+
-   `Son kapanış sinyalli coin: ${closed.length}. `+
-   `24 saatlik backtest sonucu: ${testData.length} yöntem sinyali.`
-  );
- }catch(e){
-  setStatus("Tarama başarısız: "+(e.message||"Bilinmeyen hata")+
-   ". İnternet bağlantısını ve Binance erişimini kontrol et.");
- }finally{
-  busy=false;
-  btn.disabled=false;
-  btn.textContent="TEKRAR TARA";
- }
 }
 
-render();
+function exportCSV(){
+  if(!historyResults.length){
+    setStatus("İndirilecek test kaydı yok. Önce taramayı tamamla.");
+    return;
+  }
+  const header=["Parite","Sinyal","Yöntem","Sinyal zamanı","Giriş","Sonraki saat kapanışı","Değişim yüzde","Sonuç"];
+  const rows=historyResults.map(r=>[
+    r.symbol,signalLabel(r.key),r.method,formatTime(r.time),
+    r.entry,r.exit,r.changePct.toFixed(4),
+    r.favorable?"Başarılı":"Başarısız"
+  ]);
+  const csv=[header,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="kripto-24-saat-test.csv";a.click();
+  URL.revokeObjectURL(url);
+}
+
+renderAll();
 </script>
 </body>
 </html>
