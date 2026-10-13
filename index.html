@@ -2,665 +2,214 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Binance Spot Tarayıcı</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Binance Spot Scanner Pro</title>
 <style>
-:root{--bg:#f4f6f9;--card:#fff;--text:#202938;--muted:#6b7280;--line:#e5e9f0;--green:#087f5b;--greenbg:#e6f7ef;--red:#c92a2a;--redbg:#fff0f0;--orange:#b76e00;--orangebg:#fff5dc;--blue:#2457c5}
+:root{--bg:#0b1020;--panel:#121a2b;--panel2:#172238;--line:#293650;--text:#edf3ff;--muted:#91a0ba;--green:#20d6a0;--red:#ff6279;--yellow:#ffc857;--blue:#6c9cff}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text);font-size:14px}
-main{max-width:1450px;margin:auto;padding:18px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-h1{font-size:24px;margin:0 0 5px}
-h2{font-size:17px;margin:0 0 14px}
-.sub{color:var(--muted);font-size:12px}
-button,select{border:1px solid #d7dce5;background:#fff;border-radius:8px;padding:10px 13px;font-size:13px;color:var(--text)}
-button{background:#2457c5;color:white;border:0;font-weight:700;cursor:pointer}
-button:disabled{opacity:.6;cursor:wait}
-.summary{display:grid;grid-template-columns:repeat(5,minmax(110px,1fr));gap:10px;margin-bottom:16px}
-.pill,.card{background:var(--card);border:1px solid var(--line);border-radius:12px}
-.pill{padding:13px}
-.pill .label{font-size:11px;color:var(--muted);margin-bottom:7px}
-.pill .value{font-size:19px;font-weight:700}
-.card{padding:16px;margin-bottom:16px;min-width:0}
-.cardhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.tablewrap{overflow-x:auto;width:100%}
-table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:12px}
-th,td{padding:11px 9px;text-align:left;border-bottom:1px solid var(--line)}
-th{background:#f8fafc;color:#667085;font-weight:700}
-tbody tr:hover{background:#fafcff}
+body{margin:0;background:var(--bg);color:var(--text);font:14px Arial,sans-serif}
+main{max-width:1550px;margin:auto;padding:22px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;gap:13px;align-items:center}
+.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,#f0b90b,#ffdf65);color:#161b28;display:grid;place-items:center;font-weight:900;font-size:22px}
+h1{margin:0;font-size:25px;letter-spacing:-.5px}
+.subtitle{color:var(--muted);font-size:12px;margin-top:6px}
+button,select{border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);padding:11px 13px;font-size:12px}
+button{background:#f0b90b;color:#171b26;border:0;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6}
+.status{padding:12px 14px;border:1px solid var(--line);background:var(--panel);border-radius:10px;color:var(--muted);margin-bottom:17px;overflow-wrap:anywhere;line-height:1.5}
+.status b{color:var(--green)}
+.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.metric{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);padding:17px;border-radius:13px;min-width:0}
+.metric .label{color:var(--muted);font-size:11px;margin-bottom:12px}
+.metric .num{font-size:24px;font-weight:800}
+.metric .hint{color:var(--muted);font-size:10px;margin-top:7px}
+.green{color:var(--green)!important}.red{color:var(--red)!important}.yellow{color:var(--yellow)!important}
+.section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:17px;min-width:0}
+.sectionhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:15px}
+.heading{display:flex;gap:10px;align-items:center}
+.number{background:#263956;color:#9dc0ff;border-radius:7px;padding:6px 9px;font-size:11px;font-weight:bold}
+h2{font-size:16px;margin:0}
+.desc{color:var(--muted);font-size:11px;margin-top:6px;line-height:1.5}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:9px}
+table{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap}
+th{background:#1b2740;color:#a8b7d0;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+td,th{padding:12px 10px;border-bottom:1px solid var(--line)}
 tbody tr:last-child td{border-bottom:0}
-.badge{display:inline-block;padding:5px 8px;border-radius:6px;font-size:11px;font-weight:700}
-.buy,.strongbuy{background:var(--greenbg);color:var(--green)}
-.sell,.strongsell{background:var(--redbg);color:var(--red)}
-.neutral{background:var(--orangebg);color:var(--orange)}
-.muted{color:var(--muted)}
-.positive{color:var(--green);font-weight:700}
-.negative{color:var(--red);font-weight:700}
-#status{padding:10px 12px;border-radius:8px;background:#eaf0ff;color:#214da8;margin-bottom:14px;line-height:1.5;overflow-wrap:anywhere}
-.small{font-size:11px;color:var(--muted);line-height:1.6}
-.method{max-width:260px;white-space:normal;line-height:1.4}
-.empty{text-align:center;padding:24px;color:var(--muted)}
-@media(max-width:750px){main{padding:10px}.summary{grid-template-columns:repeat(2,minmax(0,1fr))}h1{font-size:21px}.card{padding:11px}.pill .value{font-size:17px}}
+tbody tr:hover{background:#19243a}
+.badge{display:inline-block;border-radius:6px;padding:6px 8px;font-size:10px;font-weight:bold}
+.buy,.strongbuy{background:#103e38;color:#52efbe}
+.sell,.strongsell{background:#4b2330;color:#ff9aaa}
+.strongbuy{border:1px solid #1e846d}.strongsell{border:1px solid #a94258}
+.method{white-space:normal;min-width:180px;max-width:260px;line-height:1.4}
+.empty{text-align:center;color:var(--muted);padding:25px}
+.small{font-size:10px;color:var(--muted);line-height:1.6}
+.tag{display:inline-block;padding:5px 8px;border:1px solid var(--line);border-radius:6px;color:var(--muted);font-size:10px}
+.footer{color:var(--muted);font-size:11px;line-height:1.7;padding:4px 2px 15px}
+@media(max-width:850px){main{padding:12px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.metric:last-child{grid-column:span 2}h1{font-size:21px}.section{padding:12px}.metric .num{font-size:21px}}
 </style>
 </head>
 <body>
 <main>
 <header>
+ <div class="brand">
+  <div class="logo">B</div>
   <div>
-    <h1>Binance Spot Tarayıcı</h1>
-    <div class="sub">1 saatlik teknik analiz · 4 saatlik EMA200 filtresi · USDT pariteleri</div>
+   <h1>SPOT SCANNER <span style="color:#f0b90b">PRO</span></h1>
+   <div class="subtitle">BINANCE · USDT PARİTELERİ · 1 SAAT ANALİZ · 4 SAAT EMA200 FİLTRESİ</div>
   </div>
-  <button id="scanBtn" onclick="startScan()">TARAMAYI BAŞLAT</button>
+ </div>
+ <button id="scanBtn" onclick="startScan()">▶ TARAMAYI BAŞLAT</button>
 </header>
 
-<div id="status">Tarama başlatılmaya hazır. İlk tarama birkaç dakika sürebilir.</div>
+<div class="status" id="status">● Hazır. Tarama başlatıldığında Binance Spot verileri alınacaktır.</div>
 
-<section class="summary">
-  <div class="pill"><div class="label">Taranan parite</div><div class="value" id="scanned">0</div></div>
-  <div class="pill"><div class="label">Anlık sinyal</div><div class="value" id="liveCount">0</div></div>
-  <div class="pill"><div class="label">Son saat kapanışı</div><div class="value" id="closedCount">0</div></div>
-  <div class="pill"><div class="label">Son 24 saat sinyali</div><div class="value" id="historyCount">0</div></div>
-  <div class="pill"><div class="label">Son tarama</div><div class="value" id="lastScan" style="font-size:13px">-</div></div>
+<div class="metrics">
+ <div class="metric"><div class="label">TARANAN PARİTELER</div><div class="num" id="scanned">0</div><div class="hint">USDT Spot</div></div>
+ <div class="metric"><div class="label">ANLIK SİNYALLER</div><div class="num green" id="liveCount">0</div><div class="hint">Açık saatlik mum</div></div>
+ <div class="metric"><div class="label">KAPANMIŞ MUM SİNYALLERİ</div><div class="num" id="closedCount">0</div><div class="hint">Son tamamlanan saat</div></div>
+ <div class="metric"><div class="label">SON 24 SAAT KAYDI</div><div class="num yellow" id="historyCount">0</div><div class="hint">Sonraki kapanış testi</div></div>
+ <div class="metric"><div class="label">SON TARAMA</div><div class="num" id="lastScan" style="font-size:17px">-</div><div class="hint">Yerel saat</div></div>
+</div>
+
+<section class="section">
+ <div class="sectionhead">
+  <div><div class="heading"><span class="number">01</span><h2>Canlı sinyal ekranı</h2></div><div class="desc">Açık olan 1 saatlik mumla hesaplanır. Mum kapanana kadar sinyal değişebilir.</div></div>
+  <span class="tag">CANLI / GEÇİCİ</span>
+ </div>
+ <div class="filters"><select id="liveFilter" onchange="renderAll()"><option value="ALL">Tüm sinyaller</option><option value="STRONG_BUY">Güçlü Al</option><option value="BUY">Al</option><option value="STRONG_SELL">Güçlü Sat</option><option value="SELL">Sat</option></select></div>
+ <div class="tablewrap"><table><thead><tr><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Fiyat</th><th>24s hacim</th><th>RSI</th><th>4s EMA200</th></tr></thead><tbody id="liveBody"><tr><td colspan="7" class="empty">Tarama bekleniyor.</td></tr></tbody></table></div>
 </section>
 
-<section class="card">
-  <div class="cardhead">
-    <h2>1. ANLIK SİNYALLER</h2>
-    <span class="small">Açık 1 saatlik mum; sinyaller geçicidir.</span>
-  </div>
-  <div class="controls">
-    <select id="liveFilter" onchange="renderAll()">
-      <option value="ALL">Tüm sinyaller</option>
-      <option value="STRONG_BUY">Güçlü Al</option>
-      <option value="BUY">Al</option>
-      <option value="STRONG_SELL">Güçlü Sat</option>
-      <option value="SELL">Sat</option>
-    </select>
-  </div>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Fiyat</th><th>24s hacim (USDT)</th><th>RSI</th><th>4s EMA200</th></tr></thead>
-    <tbody id="liveBody"><tr><td colspan="7" class="empty">Henüz tarama yapılmadı.</td></tr></tbody>
-  </table></div>
+<section class="section">
+ <div class="sectionhead">
+  <div><div class="heading"><span class="number">02</span><h2>Son tamamlanan saat</h2></div><div class="desc">Yalnızca kapanmış mumlar. AL sinyallerinde 4 saatlik EMA200 ön koşulu uygulanır.</div></div>
+  <span class="tag">KESİNLEŞMİŞ MUM</span>
+ </div>
+ <div class="filters"><select id="closedFilter" onchange="renderAll()"><option value="ALL">Tüm sinyaller</option><option value="STRONG_BUY">Güçlü Al</option><option value="BUY">Al</option><option value="STRONG_SELL">Güçlü Sat</option><option value="SELL">Sat</option></select></div>
+ <div class="tablewrap"><table><thead><tr><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Fiyat</th><th>24s hacim</th><th>RSI</th><th>4s EMA200</th></tr></thead><tbody id="closedBody"><tr><td colspan="7" class="empty">Tarama bekleniyor.</td></tr></tbody></table></div>
 </section>
 
-<section class="card">
-  <div class="cardhead">
-    <h2>2. SON TAMAMLANAN SAAT</h2>
-    <span class="small">Kapanmış 1 saatlik mumlar; sinyaller kesinleşmiştir.</span>
-  </div>
-  <div class="controls">
-    <select id="closedFilter" onchange="renderAll()">
-      <option value="ALL">Tüm sinyaller</option>
-      <option value="STRONG_BUY">Güçlü Al</option>
-      <option value="BUY">Al</option>
-      <option value="STRONG_SELL">Güçlü Sat</option>
-      <option value="SELL">Sat</option>
-    </select>
-  </div>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Fiyat</th><th>24s hacim (USDT)</th><th>RSI</th><th>4s EMA200</th></tr></thead>
-    <tbody id="closedBody"><tr><td colspan="7" class="empty">Henüz tarama yapılmadı.</td></tr></tbody>
-  </table></div>
+<section class="section">
+ <div class="sectionhead">
+  <div><div class="heading"><span class="number">03</span><h2>Son 24 saat sinyal geçmişi</h2></div><div class="desc">Sinyal mumunun kapanışı ile sonraki kapanmış 1 saatlik mum karşılaştırılır.</div></div>
+  <span class="tag">SONRAKİ MUM TESTİ</span>
+ </div>
+ <div class="filters"><select id="historyFilter" onchange="renderAll()"><option value="ALL">Tüm sinyaller</option><option value="STRONG_BUY">Güçlü Al</option><option value="BUY">Al</option><option value="STRONG_SELL">Güçlü Sat</option><option value="SELL">Sat</option></select></div>
+ <div class="tablewrap"><table><thead><tr><th>Sinyal zamanı</th><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Giriş fiyatı</th><th>Sonraki kapanış değişimi</th><th>Sonuç</th></tr></thead><tbody id="historyBody"><tr><td colspan="7" class="empty">Henüz kayıt yok.</td></tr></tbody></table></div>
 </section>
 
-<section class="card">
-  <div class="cardhead">
-    <h2>3. SON 24 SAAT SİNYAL KAYITLARI</h2>
-    <span class="small">Kapanmış mumlarda oluşan sinyaller.</span>
-  </div>
-  <div class="controls">
-    <select id="historyFilter" onchange="renderAll()">
-      <option value="ALL">Tüm sinyaller</option>
-      <option value="STRONG_BUY">Güçlü Al</option>
-      <option value="BUY">Al</option>
-      <option value="STRONG_SELL">Güçlü Sat</option>
-      <option value="SELL">Sat</option>
-    </select>
-  </div>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Sinyal zamanı</th><th>Parite</th><th>Sinyal</th><th>Yöntem</th><th>Sinyal fiyatı</th><th>Sonraki saat değişimi</th><th>Sonuç</th></tr></thead>
-    <tbody id="historyBody"><tr><td colspan="7" class="empty">Henüz kayıt yok.</td></tr></tbody>
-  </table></div>
+<section class="section">
+ <div class="sectionhead">
+  <div><div class="heading"><span class="number">04</span><h2>Yöntem performans merkezi</h2></div><div class="desc">Her AL yöntemi ayrı ölçülür. SAT için tek birleşik teknik analiz kullanılır.</div></div>
+  <span class="tag">BAŞARI İSTATİSTİĞİ</span>
+ </div>
+ <div class="tablewrap"><table><thead><tr><th>Yöntem</th><th>İşaret</th><th>Sinyal</th><th>Olumlu</th><th>Olumsuz</th><th>Yatay</th><th>Başarı</th><th>Ort. değişim</th></tr></thead><tbody id="performanceBody"><tr><td colspan="8" class="empty">Tarama yapıldığında hesaplanır.</td></tr></tbody></table></div>
+ <p class="small">Olumlu AL: sonraki kapanış daha yüksek. Olumlu SAT: sonraki kapanış daha düşük. Başarı oranı, olumlu / (olumlu + olumsuz) şeklindedir. Komisyon dahil değildir. Spot piyasada SAT istatistiği gerçek short işlem kârı değildir.</p>
 </section>
 
-<section class="card">
-  <div class="cardhead">
-    <h2>4. YÖNTEM PERFORMANSI</h2>
-    <span class="small">Sinyal mumunun kapanışı ile sonraki kapanmış 1 saatlik mum karşılaştırılır. Komisyon dahil değildir.</span>
-  </div>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Yöntem</th><th>Sinyal sayısı</th><th>Olumlu</th><th>Olumsuz</th><th>Değişmedi</th><th>Başarı oranı</th><th>Ort. fiyat değişimi</th></tr></thead>
-    <tbody id="performanceBody"><tr><td colspan="7" class="empty">Performans için tarama yapın.</td></tr></tbody>
-  </table></div>
-  <p class="small">Al sinyali, sonraki kapanış daha yüksekse olumlu sayılır. Sat sinyali, sonraki kapanış daha düşükse olumlu sayılır. Spot piyasada Sat sonucu, gerçek bir short işlem kârı anlamına gelmez.</p>
-</section>
-
-<p class="small">Bilgi: Teknik göstergeler kesin sonuç garantisi vermez. Anlık mum kapanmadan sinyaller değişebilir. Tarayıcı emir göndermez; yalnızca analiz yapar.</p>
+<div class="footer">Önemli: Bu araç analiz ve sinyal gösterir; emir göndermez ve kâr garantisi vermez. Anlık mum sinyalleri değişebilir. Hacim için minimum eleme filtresi uygulanmaz. Binance API yanıtları veya bağlantı sorunları taramayı etkileyebilir.</div>
 </main>
 
 <script>
 "use strict";
 
-const API = "https://data-api.binance.vision";
-const HISTORY_KEY = "binance_spot_scanner_v5";
-const DAY = 24 * 60 * 60 * 1000;
+const API="https://data-api.binance.vision";
+const DAY=86400000;
+let busy=false,liveResults=[],closedResults=[],historyResults=[],performanceResults=[];
 
-let isScanning = false;
-let liveResults = [];
-let closedResults = [];
-let historyResults = [];
-let performanceResults = [];
-
-const METHODS = {
-  pullback: "EMA20/EMA50 destek dönüşü",
-  cross: "EMA20 yukarı kesişim",
-  breakout: "Hacimli direnç kırılımı",
-  momentum: "MACD + RSI momentumu",
-  sell: "Birleşik teknik analiz"
+const METHODS={
+ pullback:"EMA20/EMA50 destek dönüşü",
+ cross:"EMA20 yukarı kesişim",
+ breakout:"Hacimli direnç kırılımı",
+ momentum:"MACD + RSI momentumu",
+ sell:"Birleşik teknik analiz"
 };
 
-function setStatus(s) {
-  document.getElementById("status").textContent = s;
-}
-function fmtPrice(n) {
-  if (!Number.isFinite(n)) return "-";
-  return n.toLocaleString("en-US", {maximumFractionDigits: 8});
-}
-function fmtNum(n) {
-  if (!Number.isFinite(n)) return "-";
-  return n.toLocaleString("en-US", {maximumFractionDigits: 2});
-}
-function fmtVolume(n) {
-  if (!Number.isFinite(n)) return "-";
-  if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
-  if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
-  if (n >= 1e3) return (n / 1e3).toFixed(2) + "K";
-  return n.toFixed(0);
-}
-function fmtTime(t) {
-  return new Date(t).toLocaleString("tr-TR", {hour12:false});
-}
-function fmtPct(n) {
-  if (!Number.isFinite(n)) return "-";
-  return (n > 0 ? "+" : "") + n.toFixed(2) + "%";
-}
-function esc(s) {
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
-  }[c]));
-}
-function signalLabel(s) {
-  return ({
-    STRONG_BUY:"GÜÇLÜ AL",
-    BUY:"AL",
-    STRONG_SELL:"GÜÇLÜ SAT",
-    SELL:"SAT"
-  })[s] || s;
-}
-function badge(s) {
-  let cls = "neutral";
-  if (s === "BUY") cls = "buy";
-  if (s === "STRONG_BUY") cls = "strongbuy";
-  if (s === "SELL") cls = "sell";
-  if (s === "STRONG_SELL") cls = "strongsell";
-  return `<span class="badge ${cls}">${signalLabel(s)}</span>`;
-}
-function ema(values, period) {
-  const out = Array(values.length).fill(null);
-  if (values.length < period) return out;
-  let sum = 0;
-  for (let i = 0; i < period; i++) sum += values[i];
-  let prev = sum / period;
-  out[period - 1] = prev;
-  const k = 2 / (period + 1);
-  for (let i = period; i < values.length; i++) {
-    prev = values[i] * k + prev * (1 - k);
-    out[i] = prev;
-  }
-  return out;
-}
-function rsi(values, period = 14) {
-  const out = Array(values.length).fill(null);
-  if (values.length <= period) return out;
-  let gain = 0, loss = 0;
-  for (let i = 1; i <= period; i++) {
-    const d = values[i] - values[i - 1];
-    if (d > 0) gain += d;
-    else loss -= d;
-  }
-  let avgGain = gain / period, avgLoss = loss / period;
-  out[period] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
-  for (let i = period + 1; i < values.length; i++) {
-    const d = values[i] - values[i - 1];
-    avgGain = (avgGain * (period - 1) + Math.max(d, 0)) / period;
-    avgLoss = (avgLoss * (period - 1) + Math.max(-d, 0)) / period;
-    out[i] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
-  }
-  return out;
-}
-function macd(values) {
-  const fast = ema(values, 12);
-  const slow = ema(values, 26);
-  const line = values.map((_, i) =>
-    fast[i] == null || slow[i] == null ? null : fast[i] - slow[i]
-  );
-  const first = line.findIndex(v => v != null);
-  const sig = Array(values.length).fill(null);
-  if (first < 0) return {line, sig, hist: sig};
-  const compact = line.slice(first);
-  const compactSig = ema(compact, 9);
-  for (let i = 0; i < compactSig.length; i++) {
-    if (compactSig[i] != null) sig[first + i] = compactSig[i];
-  }
-  const hist = line.map((v, i) =>
-    v == null || sig[i] == null ? null : v - sig[i]
-  );
-  return {line, sig, hist};
-}
-function prepare(candles) {
-  const close = candles.map(c => c.close);
-  const high = candles.map(c => c.high);
-  const low = candles.map(c => c.low);
-  const volume = candles.map(c => c.volume);
-  return {
-    close, high, low, volume,
-    e20: ema(close, 20),
-    e50: ema(close, 50),
-    rsi: rsi(close, 14),
-    macd: macd(close),
-    vma: ema(volume, 20)
-  };
-}
-function trendAtTime(candles4, ema200, time) {
-  let idx = -1;
-  for (let i = 0; i < candles4.length; i++) {
-    if (candles4[i].closeTime <= time) idx = i;
-    else break;
-  }
-  if (idx < 0 || ema200[idx] == null) return false;
-  return candles4[idx].close > ema200[idx];
-}
-function candleVolumeStrong(p, i) {
-  return p.vma[i] != null && p.volume[i] >= p.vma[i] * 1.5;
-}
-function validNum(...nums) {
-  return nums.every(n => n != null && Number.isFinite(n));
-}
+function status(s){document.getElementById("status").textContent=s}
+function fmt(n,d=4){return Number.isFinite(n)?n.toLocaleString("en-US",{maximumFractionDigits:d}):"-"}
+function volfmt(n){if(!Number.isFinite(n))return "-";if(n>=1e9)return(n/1e9).toFixed(2)+"B";if(n>=1e6)return(n/1e6).toFixed(2)+"M";if(n>=1e3)return(n/1e3).toFixed(1)+"K";return n.toFixed(0)}
+function pct(n){return Number.isFinite(n)?(n>0?"+":"")+n.toFixed(2)+"%":"-"}
+function timefmt(t){return new Date(t).toLocaleString("tr-TR",{hour12:false})}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function label(t){return({BUY:"AL",STRONG_BUY:"GÜÇLÜ AL",SELL:"SAT",STRONG_SELL:"GÜÇLÜ SAT"})[t]||t}
+function badge(t){let c=({BUY:"buy",STRONG_BUY:"strongbuy",SELL:"sell",STRONG_SELL:"strongsell"})[t]||"";return `<span class="badge ${c}">${label(t)}</span>`}
+function ema(a,n){let o=Array(a.length).fill(null);if(a.length<n)return o;let s=0;for(let i=0;i<n;i++)s+=a[i];let p=s/n;o[n-1]=p;let k=2/(n+1);for(let i=n;i<a.length;i++){p=a[i]*k+p*(1-k);o[i]=p}return o}
+function rsi(a,n=14){let o=Array(a.length).fill(null);if(a.length<=n)return o;let g=0,l=0;for(let i=1;i<=n;i++){let d=a[i]-a[i-1];g+=Math.max(d,0);l+=Math.max(-d,0)}g/=n;l/=n;o[n]=l===0?100:100-100/(1+g/l);for(let i=n+1;i<a.length;i++){let d=a[i]-a[i-1];g=(g*(n-1)+Math.max(d,0))/n;l=(l*(n-1)+Math.max(-d,0))/n;o[i]=l===0?100:100-100/(1+g/l)}return o}
+function macd(a){let f=ema(a,12),s=ema(a,26),line=a.map((_,i)=>f[i]==null||s[i]==null?null:f[i]-s[i]),sig=Array(a.length).fill(null),first=line.findIndex(x=>x!=null);if(first>=0){let compact=ema(line.slice(first),9);compact.forEach((x,i)=>{if(x!=null)sig[first+i]=x})}return{line,sig,hist:line.map((x,i)=>x==null||sig[i]==null?null:x-sig[i])}}
+function prepare(c){let close=c.map(x=>x.close),volume=c.map(x=>x.volume);return{close,high:c.map(x=>x.high),low:c.map(x=>x.low),volume,e20:ema(close,20),e50:ema(close,50),rsi:rsi(close),macd:macd(close),vma:ema(volume,20)}}
+function valid(...x){return x.every(v=>v!=null&&Number.isFinite(v))}
+function strongVolume(p,i){return p.vma[i]!=null&&p.volume[i]>=p.vma[i]*1.5}
+function trendAtTime(c4,e4,t){let ix=-1;for(let i=0;i<c4.length;i++){if(c4[i].closeTime<=t)ix=i;else break}return ix>=0&&e4[ix]!=null&&c4[ix].close>e4[ix]}
+function buySignals(c,p,i,trend){let out=[];if(!trend||i<2)return out;let x=[p.close[i],p.close[i-1],p.e20[i],p.e50[i],p.e20[i-1],p.e50[i-1],p.rsi[i],p.rsi[i-1],p.macd.line[i],p.macd.sig[i],p.macd.line[i-1],p.macd.sig[i-1]];if(!valid(...x))return out;
+let close=p.close[i],prev=p.close[i-1],e20=p.e20[i],e50=p.e50[i],r=p.rsi[i],pr=p.rsi[i-1],ml=p.macd.line[i],ms=p.macd.sig[i],pml=p.macd.line[i-1],pms=p.macd.sig[i-1];
 
-/*
- * AL yöntemleri birbirinden bağımsız çalışır.
- * Her yöntem ayrı kayıt üretir; aynı paritede birden fazla AL olabilir.
- */
-function buySignals(candles, p, i, trendUp) {
-  const out = [];
-  if (!trendUp || i < 2) return out;
+// 1) Daha önce iki EMA üzerinde olan fiyatın EMA desteğine çekilip yukarı dönmesi.
+let above=false;for(let j=Math.max(0,i-5);j<i;j++){if(p.e20[j]!=null&&p.e50[j]!=null&&p.close[j]>p.e20[j]&&p.close[j]>p.e50[j])above=true}
+let touched=(p.low[i]<=e20*1.005||p.low[i]<=e50*1.005)&&close>e20&&close>e50&&close>prev;
+if(above&&touched)out.push({type:"BUY",method:METHODS.pullback});
 
-  const c = p.close[i], prev = p.close[i - 1];
-  const e20 = p.e20[i], e50 = p.e50[i];
-  const pe20 = p.e20[i - 1], pe50 = p.e50[i - 1];
-  const r = p.rsi[i], pr = p.rsi[i - 1];
-  const ml = p.macd.line[i], ms = p.macd.sig[i];
-  const pml = p.macd.line[i - 1], pms = p.macd.sig[i - 1];
+// 2) EMA20'nın EMA50'yi yukarı kesmesi.
+if(p.e20[i-1]<=p.e50[i-1]&&e20>e50)out.push({type:"STRONG_BUY",method:METHODS.cross});
 
-  if (!validNum(c, prev, e20, e50, pe20, pe50, r, pr, ml, ms, pml, pms)) return out;
+// 3) Önceki 20 mumun tepesinin güçlü hacimle kırılması.
+let top=-Infinity;for(let j=Math.max(0,i-20);j<i;j++)top=Math.max(top,p.high[j]);
+if(Number.isFinite(top)&&close>top&&strongVolume(p,i))out.push({type:"STRONG_BUY",method:METHODS.breakout});
 
-  // 1. Önceden EMA20/EMA50 üzerinde olan fiyatın destek bölgesine çekilip yukarı dönmesi.
-  const recentStart = Math.max(0, i - 5);
-  let wasAboveBoth = false;
-  for (let j = recentStart; j < i; j++) {
-    if (p.e20[j] != null && p.e50[j] != null &&
-        p.close[j] > p.e20[j] && p.close[j] > p.e50[j]) {
-      wasAboveBoth = true;
-      break;
-    }
-  }
-  const touched20 = p.low[i] <= e20 * 1.005 && c > e20 && c > e50;
-  const touched50 = p.low[i] <= e50 * 1.005 && c > e20 && c > e50;
-  const turnedUp = c > prev;
-  if (wasAboveBoth && (touched20 || touched50) && turnedUp) {
-    out.push({type:"BUY", method:METHODS.pullback});
-  }
-
-  // 2. EMA20'nın EMA50'yi yukarı kesmesi.
-  if (pe20 <= pe50 && e20 > e50) {
-    out.push({type:"STRONG_BUY", method:METHODS.cross});
-  }
-
-  // 3. Önceki 20 mumun tepesinin hacim artışıyla kırılması.
-  const start = Math.max(0, i - 20);
-  let priorHigh = -Infinity;
-  for (let j = start; j < i; j++) priorHigh = Math.max(priorHigh, p.high[j]);
-  if (Number.isFinite(priorHigh) && c > priorHigh && candleVolumeStrong(p, i)) {
-    out.push({type:"STRONG_BUY", method:METHODS.breakout});
-  }
-
-  // 4. MACD yukarı kesişimi ve RSI yükseliş momentumu.
-  const macdCross = pml <= pms && ml > ms;
-  if (macdCross && r >= 50 && r > pr) {
-    out.push({type:"BUY", method:METHODS.momentum});
-  } else if (ml > ms && r >= 55 && r > pr && c > e20 && c > e50) {
-    out.push({type:"BUY", method:METHODS.momentum});
-  }
-
-  // Aynı yöntem için aynı mumda çift kayıt oluşmasını engelle.
-  const seen = new Set();
-  return out.filter(x => {
-    if (seen.has(x.method)) return false;
-    seen.add(x.method);
-    return true;
-  });
+// 4) MACD ve RSI birlikte yükseliş gösteriyor.
+if((pml<=pms&&ml>ms&&r>=50&&r>pr)||(ml>ms&&r>=55&&r>pr&&close>e20&&close>e50))out.push({type:"BUY",method:METHODS.momentum});
+return out;
 }
+function sellSignal(c,p,i){if(i<2)return null;let close=p.close[i],prev=p.close[i-1],e20=p.e20[i],e50=p.e50[i],r=p.rsi[i],pr=p.rsi[i-1],ml=p.macd.line[i],ms=p.macd.sig[i],pml=p.macd.line[i-1],pms=p.macd.sig[i-1];if(!valid(close,prev,e20,e50,p.e20[i-1],p.e50[i-1],r,pr,ml,ms,pml,pms))return null;
+let score=0;if(close<e20)score++;if(close<e50)score++;if(e20<e50)score++;if(pml>=pms&&ml<ms)score++;else if(ml<ms&&r<45)score++;if(r<45&&r<pr)score++;
+let floor=Infinity;for(let j=Math.max(0,i-20);j<i;j++)floor=Math.min(floor,p.low[j]);let breakdown=Number.isFinite(floor)&&close<floor&&strongVolume(p,i);if(breakdown)score+=2;
+if(score>=4||(breakdown&&score>=3))return{type:"STRONG_SELL",method:METHODS.sell};if(score>=2)return{type:"SELL",method:METHODS.sell};return null}
+function signalsAt(c,p,i,trend){let sell=sellSignal(c,p,i);if(sell)return[sell];return buySignals(c,p,i,trend)}
+function parseK(k){return{openTime:+k[0],open:+k[1],high:+k[2],low:+k[3],close:+k[4],volume:+k[5],closeTime:+k[6]}}
+async function getJSON(path){let r=await fetch(API+path);if(!r.ok)throw Error("Binance API HTTP "+r.status);return r.json()}
+function signalRow(symbol,s,c,volume,rsiVal,trend,time){return{symbol,type:s.type,method:s.method,price:c.close,volume24:volume,rsi:rsiVal,trendUp:trend,time}}
+function renderSignal(id,list,filterId){let filter=document.getElementById(filterId).value;let rows=list.filter(x=>filter==="ALL"||x.type===filter).slice().sort((a,b)=>a.symbol.localeCompare(b.symbol)||a.method.localeCompare(b.method));let body=document.getElementById(id);if(!rows.length){body.innerHTML='<tr><td colspan="7" class="empty">Bu filtrede sinyal bulunamadı.</td></tr>';return}body.innerHTML=rows.map(x=>`<tr><td><b>${esc(x.symbol)}</b></td><td>${badge(x.type)}</td><td class="method">${esc(x.method)}</td><td>${fmt(x.price,8)}</td><td>${volfmt(x.volume24)}</td><td>${fmt(x.rsi,2)}</td><td class="${x.trendUp?"green":"red"}">${x.trendUp?"Yukarı":"Aşağı"}</td></tr>`).join("")}
+function renderHistory(){let filter=document.getElementById("historyFilter").value,rows=historyResults.filter(x=>filter==="ALL"||x.type===filter).slice().sort((a,b)=>b.time-a.time),body=document.getElementById("historyBody");if(!rows.length){body.innerHTML='<tr><td colspan="7" class="empty">Son 24 saatte test edilebilir sinyal yok.</td></tr>';return}body.innerHTML=rows.map(x=>{let changeClass=x.changePct>0?"green":x.changePct<0?"red":"";let outcome=x.outcome==="win"?'<span class="green">Olumlu</span>':x.outcome==="loss"?'<span class="red">Olumsuz</span>':'Yatay';return`<tr><td>${timefmt(x.time)}</td><td><b>${esc(x.symbol)}</b></td><td>${badge(x.type)}</td><td class="method">${esc(x.method)}</td><td>${fmt(x.price,8)}</td><td class="${changeClass}">${pct(x.changePct)}</td><td>${outcome}</td></tr>`}).join("")}
+function buildStats(history){let map=new Map(Object.values(METHODS).map(m=>[m,{method:m,count:0,win:0,loss:0,flat:0,sum:0,type:m===METHODS.sell?"SAT":"AL"}]));for(let x of history){let s=map.get(x.method);if(!s)continue;s.count++;s.sum+=x.changePct;if(x.outcome==="win")s.win++;else if(x.outcome==="loss")s.loss++;else s.flat++}return[...map.values()]}
+function renderPerformance(){let body=document.getElementById("performanceBody");if(!performanceResults.length){body.innerHTML='<tr><td colspan="8" class="empty">Performans verisi yok.</td></tr>';return}body.innerHTML=performanceResults.map(x=>{let n=x.win+x.loss,rate=n?(100*x.win/n).toFixed(1)+"%":"-";let av=x.count?pct(x.sum/x.count):"-";return`<tr><td class="method">${esc(x.method)}</td><td>${x.type}</td><td>${x.count}</td><td class="green">${x.win}</td><td class="red">${x.loss}</td><td>${x.flat}</td><td>${rate}</td><td>${av}</td></tr>`}).join("")}
+function renderAll(){renderSignal("liveBody",liveResults,"liveFilter");renderSignal("closedBody",closedResults,"closedFilter");renderHistory();renderPerformance();document.getElementById("liveCount").textContent=liveResults.length;document.getElementById("closedCount").textContent=closedResults.length;document.getElementById("historyCount").textContent=historyResults.length}
+function backtest(symbol,c,p,c4,e4,volume,now){let out=[],from=Math.max(60,c.length-28),cutoff=now-DAY;for(let i=from;i<c.length-1;i++){if(c[i].closeTime<cutoff)continue;let trend=trendAtTime(c4,e4,c[i].closeTime),sigs=signalsAt(c,p,i,trend),entry=c[i].close,next=c[i+1].close,change=entry?100*(next-entry)/entry:0;for(let s of sigs){let isBuy=s.type==="BUY"||s.type==="STRONG_BUY";let outcome=(isBuy?change>0:change<0)?"win":(change===0?"flat":"loss");out.push({symbol,type:s.type,method:s.method,price:entry,time:c[i].closeTime,changePct:change,outcome,volume24:volume,rsi:p.rsi[i],trendUp:trend})}}return out}
 
-/*
- * SAT tek birleşik teknik analiz yöntemidir.
- * 4 saatlik EMA200, SAT sinyaline filtre olarak uygulanmaz.
- */
-function sellSignal(candles, p, i) {
-  if (i < 2) return null;
-  const c = p.close[i], prev = p.close[i - 1];
-  const e20 = p.e20[i], e50 = p.e50[i];
-  const pe20 = p.e20[i - 1], pe50 = p.e50[i - 1];
-  const r = p.rsi[i], pr = p.rsi[i - 1];
-  const ml = p.macd.line[i], ms = p.macd.sig[i];
-  const pml = p.macd.line[i - 1], pms = p.macd.sig[i - 1];
-
-  if (!validNum(c, prev, e20, e50, pe20, pe50, r, pr, ml, ms, pml, pms)) return null;
-
-  let score = 0;
-  if (c < e20) score++;
-  if (c < e50) score++;
-  if (e20 < e50) score++;
-  if (pml >= pms && ml < ms) score++;
-  else if (ml < ms && r < 45) score++;
-  if (r < 45 && r < pr) score++;
-
-  const start = Math.max(0, i - 20);
-  let priorLow = Infinity;
-  for (let j = start; j < i; j++) priorLow = Math.min(priorLow, p.low[j]);
-  const breakdown = Number.isFinite(priorLow) && c < priorLow && candleVolumeStrong(p, i);
-
-  if (breakdown) score += 2;
-  if (score >= 4 || (breakdown && score >= 3)) {
-    return {type:"STRONG_SELL", method:METHODS.sell};
-  }
-  if (score >= 2) return {type:"SELL", method:METHODS.sell};
-  return null;
-}
-
-function signalsAt(candles, p, i, trendUp) {
-  const buys = buySignals(candles, p, i, trendUp);
-  const sell = sellSignal(candles, p, i);
-  // Bir mumda SAT koşulu oluşmuşsa çelişkili AL kayıtlarını göstermeyelim.
-  if (sell) return [sell];
-  return buys;
-}
-
-function toCandle(k) {
-  return {
-    openTime:Number(k[0]),
-    open:Number(k[1]),
-    high:Number(k[2]),
-    low:Number(k[3]),
-    close:Number(k[4]),
-    volume:Number(k[5]),
-    closeTime:Number(k[6])
-  };
-}
-async function getJSON(path) {
-  const res = await fetch(API + path);
-  if (!res.ok) throw new Error("Binance API HTTP " + res.status + " — " + path);
-  return res.json();
-}
-function signalRow(symbol, sig, candle, vol24, rsiValue, trendUp, time) {
-  return {
-    symbol, type:sig.type, method:sig.method,
-    price:candle.close, volume24:vol24,
-    rsi:rsiValue, trendUp, time
-  };
-}
-function filtered(list, filter) {
-  return filter === "ALL" ? list : list.filter(x => x.type === filter);
-}
-function renderSignalRows(bodyId, list, filter) {
-  const body = document.getElementById(bodyId);
-  const rows = filtered(list, filter).slice().sort((a,b) => {
-    const rank = {STRONG_BUY:0, BUY:1, STRONG_SELL:2, SELL:3};
-    return (rank[a.type] ?? 9) - (rank[b.type] ?? 9) ||
-      a.symbol.localeCompare(b.symbol) ||
-      a.method.localeCompare(b.method);
-  });
-  if (!rows.length) {
-    body.innerHTML = '<tr><td colspan="7" class="empty">Bu filtrede sinyal bulunamadı.</td></tr>';
-    return;
-  }
-  body.innerHTML = rows.map(x => `<tr>
-    <td><b>${esc(x.symbol)}</b></td>
-    <td>${badge(x.type)}</td>
-    <td class="method">${esc(x.method)}</td>
-    <td>${fmtPrice(x.price)}</td>
-    <td>${fmtVolume(x.volume24)}</td>
-    <td>${fmtNum(x.rsi)}</td>
-    <td>${x.trendUp ? '<span class="positive">Yukarı</span>' : '<span class="negative">Aşağı</span>'}</td>
-  </tr>`).join("");
-}
-function renderHistory() {
-  const body = document.getElementById("historyBody");
-  const filter = document.getElementById("historyFilter").value;
-  const rows = filtered(historyResults, filter).slice().sort((a,b) => b.time-a.time);
-  if (!rows.length) {
-    body.innerHTML = '<tr><td colspan="7" class="empty">Son 24 saatte kayıt bulunamadı.</td></tr>';
-    return;
-  }
-  body.innerHTML = rows.map(x => {
-    const cls = x.changePct > 0 ? "positive" : x.changePct < 0 ? "negative" : "";
-    const outcome = x.outcome === "win" ? '<span class="positive">Olumlu</span>' :
-      x.outcome === "loss" ? '<span class="negative">Olumsuz</span>' : '<span class="muted">Değişmedi</span>';
-    return `<tr>
-      <td>${fmtTime(x.time)}</td>
-      <td><b>${esc(x.symbol)}</b></td>
-      <td>${badge(x.type)}</td>
-      <td class="method">${esc(x.method)}</td>
-      <td>${fmtPrice(x.price)}</td>
-      <td class="${cls}">${fmtPct(x.changePct)}</td>
-      <td>${outcome}</td>
-    </tr>`;
-  }).join("");
-}
-function renderPerformance() {
-  const body = document.getElementById("performanceBody");
-  if (!performanceResults.length) {
-    body.innerHTML = '<tr><td colspan="7" class="empty">Henüz performans verisi yok.</td></tr>';
-    return;
-  }
-  body.innerHTML = performanceResults.map(x => {
-    const evaluated = x.win + x.loss;
-    const rate = evaluated ? (x.win / evaluated * 100).toFixed(1) + "%" : "-";
-    const avg = x.count ? fmtPct(x.sumChange / x.count) : "-";
-    return `<tr>
-      <td class="method"><b>${esc(x.method)}</b></td>
-      <td>${x.count}</td><td class="positive">${x.win}</td>
-      <td class="negative">${x.loss}</td><td>${x.flat}</td>
-      <td>${rate}</td><td>${avg}</td>
-    </tr>`;
-  }).join("");
-}
-function renderAll() {
-  renderSignalRows("liveBody", liveResults, document.getElementById("liveFilter").value);
-  renderSignalRows("closedBody", closedResults, document.getElementById("closedFilter").value);
-  renderHistory();
-  renderPerformance();
-  document.getElementById("liveCount").textContent = liveResults.length;
-  document.getElementById("closedCount").textContent = closedResults.length;
-  document.getElementById("historyCount").textContent = historyResults.length;
-}
-function blankPerformance() {
-  return Object.values(METHODS).map(method => ({
-    method, count:0, win:0, loss:0, flat:0, sumChange:0
-  }));
-}
-function buildPerformance(history) {
-  const map = new Map(blankPerformance().map(x => [x.method, x]));
-  for (const x of history) {
-    const stat = map.get(x.method);
-    if (!stat) continue;
-    stat.count++;
-    stat.sumChange += x.changePct;
-    if (x.outcome === "win") stat.win++;
-    else if (x.outcome === "loss") stat.loss++;
-    else stat.flat++;
-  }
-  return [...map.values()];
-}
-function buildBacktest(symbol, candles, p, trend4, ema4, vol24, now) {
-  const out = [];
-  const cutoff = now - DAY;
-  // i+1 kapanmış mum olmalı: sonuç sonraki kapanışla hesaplanır.
-  for (let i = Math.max(60, candles.length - 28); i < candles.length - 1; i++) {
-    const time = candles[i].closeTime;
-    if (time < cutoff) continue;
-    const trendUp = trendAtTime(trend4, ema4, time);
-    const sigs = signalsAt(candles, p, i, trendUp);
-    const entry = candles[i].close;
-    const next = candles[i + 1].close;
-    const changePct = entry ? ((next - entry) / entry) * 100 : 0;
-
-    for (const sig of sigs) {
-      const favorable = sig.type === "BUY" || sig.type === "STRONG_BUY"
-        ? changePct > 0
-        : changePct < 0;
-      const unfavorable = sig.type === "BUY" || sig.type === "STRONG_BUY"
-        ? changePct < 0
-        : changePct > 0;
-      out.push({
-        symbol, type:sig.type, method:sig.method,
-        price:entry, time, changePct,
-        outcome:favorable ? "win" : unfavorable ? "loss" : "flat",
-        volume24:vol24, rsi:p.rsi[i], trendUp
-      });
-    }
-  }
-  return out;
-}
-
-async function startScan() {
-  if (isScanning) return;
-  isScanning = true;
-  const btn = document.getElementById("scanBtn");
-  btn.disabled = true;
-  btn.textContent = "TARANIYOR...";
-  liveResults = [];
-  closedResults = [];
-  historyResults = [];
-  performanceResults = [];
-  renderAll();
-
-  let done = 0, total = 0, errors = 0;
-  try {
-    setStatus("Spot pariteleri alınıyor...");
-    const info = await getJSON("/api/v3/exchangeInfo");
-    const symbols = info.symbols
-      .filter(s => s.status === "TRADING" && s.quoteAsset === "USDT" && s.isSpotTradingAllowed)
-      .map(s => s.symbol);
-
-    const tickers = await getJSON("/api/v3/ticker/24hr");
-    const tickerMap = new Map(tickers.map(t => [t.symbol, t]));
-    const validSymbols = symbols.filter(s => tickerMap.has(s));
-    total = validSymbols.length;
-    document.getElementById("scanned").textContent = "0 / " + total;
-    setStatus(total + " USDT Spot paritesi bulundu. 1 saatlik ve 4 saatlik mumlar taranıyor...");
-
-    const queue = validSymbols.slice();
-    const allHistory = [];
-    const live = [];
-    const closed = [];
-
-    async function worker() {
-      while (queue.length) {
-        const symbol = queue.shift();
-        try {
-          const [raw1, raw4] = await Promise.all([
-            getJSON("/api/v3/klines?symbol=" + symbol + "&interval=1h&limit=100"),
-            getJSON("/api/v3/klines?symbol=" + symbol + "&interval=4h&limit=220")
-          ]);
-          const all1 = raw1.map(toCandle);
-          const now = Date.now();
-
-          // Kapanış zamanı geçmiş mumlar.
-          const candles1 = all1.filter(c => c.closeTime < now);
-          const candles4 = raw4.map(toCandle).filter(c => c.closeTime < now);
-          if (candles1.length < 60 || candles4.length < 200) {
-            done++;
-            document.getElementById("scanned").textContent = done + " / " + total;
-            continue;
-          }
-
-          const pClosed = prepare(candles1);
-          const close4 = candles4.map(c => c.close);
-          const ema4 = ema(close4, 200);
-          const lastClosed = candles1.length - 1;
-          const vol24 = Number(tickerMap.get(symbol)?.quoteVolume || 0);
-          const lastTrend = trendAtTime(candles4, ema4, candles1[lastClosed].closeTime);
-
-          // Son tamamlanan saat için sinyaller.
-          const closedSigs = signalsAt(candles1, pClosed, lastClosed, lastTrend);
-          for (const sig of closedSigs) {
-            closed.push(signalRow(symbol, sig, candles1[lastClosed], vol24,
-              pClosed.rsi[lastClosed], lastTrend, candles1[lastClosed].closeTime));
-          }
-
-          // Anlık görünüm: kapanmamış mevcut saatlik mum da dahil.
-          const pAll = prepare(all1);
-          const liveIndex = all1.length - 1;
-          const liveCandle = all1[liveIndex];
-          const liveTrend = lastTrend;
-          const liveSigs = signalsAt(all1, pAll, liveIndex, liveTrend);
-          for (const sig of liveSigs) {
-            live.push(signalRow(symbol, sig, liveCandle, vol24,
-              pAll.rsi[liveIndex], liveTrend, now));
-          }
-
-          // Son 24 saat için sonraki kapanışla test edilen geçmiş sinyaller.
-          allHistory.push(...buildBacktest(symbol, candles1, pClosed, candles4, ema4, vol24, now));
-        } catch (e) {
-          errors++;
-        }
-        done++;
-        document.getElementById("scanned").textContent = done + " / " + total;
-        if (done % 20 === 0 || done === total) {
-          setStatus("Tarama sürüyor: " + done + " / " + total +
-            " parite. Geçici hata: " + errors + ". Sonuçlar birikiyor...");
-          liveResults = live.slice();
-          closedResults = closed.slice();
-          historyResults = allHistory.slice().sort((a,b) => b.time-a.time);
-          performanceResults = buildPerformance(historyResults);
-          renderAll();
-        }
-      }
-    }
-
-    // API limitlerini zorlamamak için en fazla 3 eşzamanlı işçi.
-    await Promise.all([worker(), worker(), worker()]);
-
-    liveResults = live;
-    closedResults = closed;
-    historyResults = allHistory.sort((a,b) => b.time-a.time);
-    performanceResults = buildPerformance(historyResults);
-    renderAll();
-
-    document.getElementById("lastScan").textContent =
-      new Date().toLocaleTimeString("tr-TR", {hour12:false});
-    setStatus("Tarama tamamlandı. " + done + " parite incelendi; " +
-      liveResults.length + " anlık, " + closedResults.length +
-      " kapanmış mum sinyali bulundu. API hatası: " + errors + ".");
-  } catch (e) {
-    setStatus("Tarama başarısız: " + (e && e.message ? e.message : String(e)) +
-      ". Sayfayı yenileyip tekrar deneyin.");
-  } finally {
-    isScanning = false;
-    btn.disabled = false;
-    btn.textContent = "TARAMAYI BAŞLAT";
-  }
+async function startScan(){
+ if(busy)return;busy=true;let btn=document.getElementById("scanBtn");btn.disabled=true;btn.textContent="TARANIYOR...";
+ liveResults=[];closedResults=[];historyResults=[];performanceResults=[];renderAll();let done=0,errors=0,total=0;
+ try{
+  status("Binance Spot pariteleri alınıyor...");
+  let info=await getJSON("/api/v3/exchangeInfo");
+  let symbols=info.symbols.filter(s=>s.status==="TRADING"&&s.quoteAsset==="USDT"&&s.isSpotTradingAllowed).map(s=>s.symbol);
+  let tickers=await getJSON("/api/v3/ticker/24hr"),tickerMap=new Map(tickers.map(t=>[t.symbol,t]));
+  symbols=symbols.filter(s=>tickerMap.has(s));total=symbols.length;
+  document.getElementById("scanned").textContent="0 / "+total;
+  status(total+" USDT Spot paritesi taranıyor. Bu işlem API hızına göre birkaç dakika sürebilir.");
+  let queue=symbols.slice(),live=[],closed=[],history=[];
+  async function worker(){while(queue.length){let symbol=queue.shift();try{
+   let [raw1,raw4]=await Promise.all([
+    getJSON("/api/v3/klines?symbol="+symbol+"&interval=1h&limit=100"),
+    getJSON("/api/v3/klines?symbol="+symbol+"&interval=4h&limit=220")
+   ]);
+   let now=Date.now(),all1=raw1.map(parseK),candles=all1.filter(c=>c.closeTime<now),c4=raw4.map(parseK).filter(c=>c.closeTime<now);
+   if(candles.length<60||c4.length<200){done++;document.getElementById("scanned").textContent=done+" / "+total;continue}
+   let p=prepare(candles),e4=ema(c4.map(c=>c.close),200),i=candles.length-1,vol=Number(tickerMap.get(symbol).quoteVolume||0),trend=trendAtTime(c4,e4,candles[i].closeTime);
+   for(let s of signalsAt(candles,p,i,trend))closed.push(signalRow(symbol,s,candles[i],vol,p.rsi[i],trend,candles[i].closeTime));
+   // Anlık sinyal, kapanmamış saatlik mum üzerinden.
+   let pa=prepare(all1),li=all1.length-1;
+   for(let s of signalsAt(all1,pa,li,trend))live.push(signalRow(symbol,s,all1[li],vol,pa.rsi[li],trend,now));
+   history.push(...backtest(symbol,candles,p,c4,e4,vol,now));
+  }catch(e){errors++}done++;document.getElementById("scanned").textContent=done+" / "+total;
+   if(done%15===0||done===total){liveResults=live.slice();closedResults=closed.slice();historyResults=history.slice().sort((a,b)=>b.time-a.time);performanceResults=buildStats(historyResults);renderAll();status("Tarama devam ediyor: "+done+" / "+total+" parite. Geçici API hatası: "+errors+".")}
+  }}
+  await Promise.all([worker(),worker(),worker()]);
+  liveResults=live;closedResults=closed;historyResults=history.sort((a,b)=>b.time-a.time);performanceResults=buildStats(historyResults);renderAll();
+  document.getElementById("lastScan").textContent=new Date().toLocaleTimeString("tr-TR",{hour12:false});
+  status("Tarama tamamlandı. "+done+" parite incelendi. Anlık sinyal: "+live.length+" · Kapanmış mum: "+closed.length+" · Sonraki mum testi: "+history.length+" · API hatası: "+errors+".");
+ }catch(e){status("Tarama hatası: "+(e&&e.message?e.message:String(e))+". İnternet bağlantısını ve GitHub Pages adresini kontrol et.")}
+ finally{busy=false;btn.disabled=false;btn.textContent="▶ TARAMAYI BAŞLAT"}
 }
 </script>
 </body>
